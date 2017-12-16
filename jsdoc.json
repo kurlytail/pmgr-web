@@ -1,0 +1,29 @@
+{
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "include": ["./src"],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "plugins": ["plugins/markdown"],
+    "opts": {
+        "destination": "./docs/",
+        "readme": "README.md",
+        "template": "./node_modules/ink-docstrap/template",
+        "recurse": true
+    },
+    "templates": {
+        "cleverLinks": false,
+        "systemName": "model",
+        "copyright": "© 2017 BST",
+        "includeDate": true,
+        "navType": "vertical",
+        "theme": "spacelab",
+        "linenums": "true",
+        "collapseSymbols": false,
+        "outputSourceFiles": true,
+        "syntaxTheme": "dark"
+    }
+}
