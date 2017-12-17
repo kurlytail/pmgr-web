@@ -4,7 +4,9 @@
     "version": "99.99.99",
     "main": "dist/index.min.js",
     "dependencies": {
-        "redux": "^3.7.2"
+        "lodash": "^4.17.4",
+        "redux": "^3.7.2",
+        "tracer": "^0.8.11"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
