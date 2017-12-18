@@ -1,6 +1,6 @@
-import Elaborate from './elaborate';
+//import Elaborate from './elaborate';
 
-const initReducer = (state, action) => {
+const initReducer = (state) => {
     /* Determine all documents with no sources */
     /* Force definition of some extra documents */
     return Object.assign({}, state, { percentComplete: 0 });

@@ -27,10 +27,13 @@ dependencies = Object.keys(dependencies).map(key => {
 });
 
 const config = {
-    entry: ['./src/index.js'],
+    entry: {
+        lib: './src/index.js',
+        server: './src/server.js'
+    },
 
     output: {
-        filename: `index${isDist}.js`,
+        filename: `[name]${isDist}.js`,
         path: path.join(__dirname, 'dist'),
         pathinfo: !isProd,
         libraryTarget: 'commonjs2'
