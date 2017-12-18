@@ -1,4 +1,4 @@
-import Elaborate from 'elaborate';
+import { Elaborate } from 'index';
 
 describe('Elaborator', () => {
     it('Check activities', () => {
@@ -17,4 +17,3 @@ describe('Elaborator', () => {
         expect(Elaborate.Tools).toBeDefined();
     });
 });
-
