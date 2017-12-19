@@ -1,7 +1,8 @@
 import _ from 'lodash';
+import DocumentReducer from './document';
 
-const initReducer = (state) => {
-    return Object.assign({}, state);
+const initReducer = (state, action) => {
+    return Object.assign({}, state, { name: action.name });
 };
 
 const finalizeReducer = state => {
@@ -19,7 +20,7 @@ const projectReducer = (state, action) => {
         case 'PROJECT_FINALIZE':
             return finalizeReducer(state, action);
         default:
-            return state;
+            return DocumentReducer(state, action);
     }
 };
 

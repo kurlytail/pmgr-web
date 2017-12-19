@@ -3,19 +3,20 @@ import _ from 'lodash';
 
 describe('Project Reducer', () => {
     it('Project Init', () => {
-        var state = ProjectReducer({}, { type: 'PROJECT_INIT' });
-        expect(state.documents['project_statement_of_work']).toBeDefined();
-        expect(state.documents['contract']).toBeDefined();
-        expect(state.documents['enterprise_environmental_factors']).toBeDefined();
-        expect(state.documents['project_management_processes']).toBeDefined();
+        var state = ProjectReducer({}, { type: 'PROJECT_INIT', name: 'test' });
+        expect(state.name).toBe('test');
     });
 
     it('Project Finalize', () => {
         var state = ProjectReducer({}, { type: 'PROJECT_INIT' });
+
+        state.documents = {
+            test1: { percentComplete: 10 },
+            test2: { percentComplete: 20 }
+        };
         state = ProjectReducer(state, { type: 'PROJECT_FINALIZE' });
-        _.forEach(state.documents, document => {
-            expect(document.percentComplete).toBe(100);
-        });
+        expect(state.documents.test1.percentComplete).toBe(100);
+        expect(state.documents.test2.percentComplete).toBe(100);
     });
 
     it('Project unrecognized state', () => {

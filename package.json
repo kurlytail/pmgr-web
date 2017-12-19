@@ -44,10 +44,10 @@
     "scripts": {
         "docs": "jsdoc -c jsdoc.json && npx opn-cli ./docs/index.html",
         "build:dll": "npm run build -- --config ./webpack_dll.config.js",
-        "build": "webpack --display-modules --display-reasons",
+        "build": "webpack --display-modules --display-reasons --watch",
         "build:debug": "NODE_ENV=\"debug\" npm run build",
         "build:prod": "npm run clean && NODE_ENV=\"production\" npm run build",
-        "start": "npm run build -- --watch",
+        "start": "npm run build:debug -- --watch",
         "lint": "eslint src",
         "test": "jest tests",
         "test:watch": "jest --watch tests",

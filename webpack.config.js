@@ -29,7 +29,7 @@ dependencies = Object.keys(dependencies).map(key => {
 const config = {
     entry: {
         lib: './src/index.js',
-        server: './src/server.js'
+        app: './src/app.js'
     },
 
     output: {

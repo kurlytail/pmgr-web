@@ -7,8 +7,8 @@ import thunk from 'redux-thunk';
 
 const middlewares = [thunk, Saga];
 
-if (process.env.NODE_ENV === `development`) {
-    const logger = createLogger();
+if (process.env.NODE_ENV === 'development') {
+    const logger = createLogger({ colors: false });
     middlewares.push(logger);
 }
 
