@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import DocumentReducer from './document';
+import { injectReducer } from './store';
 
 const initReducer = (state, action) => {
     return Object.assign({}, state, { name: action.name });
@@ -24,4 +25,4 @@ const projectReducer = (state, action) => {
     }
 };
 
-export default projectReducer;
+injectReducer('app.project', projectReducer);

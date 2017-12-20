@@ -7,17 +7,13 @@ const chalk = require('chalk');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const UglifyEsPlugin = require('uglify-es-webpack-plugin');
 
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
 const isProd = process.env.NODE_ENV === 'production';
 const isDebug = process.env.NODE_ENV === 'debug';
 const isDist = isDebug || isProd ? '.min' : '';
 const distPath = path.join(__dirname, 'dist');
-const dll_manifest_file = path.join(distPath, 'dependencies_dll.json');
 const showConfigOnly = '1' === process.env.SHOW_CONFIG_ONLY || 'true' === process.env.SHOW_CONFIG_ONLY;
-
-const DLLPlugin = new webpack.DllReferencePlugin({
-    manifest: dll_manifest_file,
-    sourceType: 'var'
-});
 
 // Read dependencies key from package.json, and map out regex obj's
 //   for advanced filtering.
@@ -28,15 +24,14 @@ dependencies = Object.keys(dependencies).map(key => {
 
 const config = {
     entry: {
-        lib: './src/index.js',
-        app: './src/app.js'
+        app: './src/app.jsx'
     },
 
     output: {
         filename: `[name]${isDist}.js`,
         path: path.join(__dirname, 'dist'),
         pathinfo: !isProd,
-        libraryTarget: 'commonjs2'
+        libraryTarget: 'var'
     },
 
     devtool: isProd ? false : 'inline-source-map',
@@ -47,6 +42,11 @@ const config = {
     },
 
     plugins: [
+        new HtmlWebpackPlugin({
+            title: 'Project Manager 1.0',
+            filename: 'index.html',
+            template: './src/html.jst'
+        }),
         new CircularDependencyPlugin({
             exclude: /node_modules/,
             failOnError: false
@@ -77,37 +77,57 @@ const config = {
                 exclude: /node_modules/,
                 test: /\.js$/,
                 loader: 'babel-loader'
+            },
+            {
+                exclude: /node_modules/,
+                test: /\.jsx$/,
+                loader: 'babel-loader'
+            },
+            {
+                test : /\.css$/,
+                loader: 'style-loader'
+            },
+            {
+                test : /\.css$/,
+                loader: 'css-loader',
+                query: {
+                    modules: true,
+                    localIdentName: '[name]__[local]___[hash:base64:5]'
+                }
+            },
+            {
+                test : /\.less$/,
+                use: [
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
+                        loader: 'css-loader'
+                    },
+                    {
+                        loader: 'less-loader'
+                    },
+                ]
+            },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
+                loader: [
+                    'file-loader'
+                ]
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                loader: [
+                    'file-loader'
+                ]
             }
         ]
     },
 
-    target: 'node'
+    target: 'web'
 };
 
-// Development Modifications
-if (!isProd) {
-    // Ensure Development DLL exists
-    if (!isDebug && false === fs.existsSync(dll_manifest_file)) {
-        console.log(
-            chalk.red(`Development DLL file does not exist at ${dll_manifest_file}\nPlease build with:`),
-            chalk.red.bold('npm run build:dll')
-        );
-        process.exit(99);
-    }
-
-    // If we want a DEBUG build (aka, deploy to npm-dev), then don't use DLLPlugin,
-    //   and externalize all dependencies.
-    if (isDebug) {
-        config.externals = dependencies;
-    } else {
-        // Otherwise this is a local development build, and we want to utilize a DLL
-        config.plugins.push(DLLPlugin);
-    }
-} else {
-    // Production Modifications
-
-    config.externals = dependencies;
-
+if (isProd) {
     config.plugins.push(new UglifyEsPlugin({ mangle: true, compress: true }));
 }
 
@@ -119,4 +139,3 @@ if (showConfigOnly) {
 }
 
 module.exports = config;
-

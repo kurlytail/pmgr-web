@@ -33,7 +33,7 @@ const documentReducer = (state, action) => {
         case 'DOCUMENT_UPDATE':
             return setCompleteReducer(state, action);
         default:
-            return state;
+            return {};
     }
 };
 
