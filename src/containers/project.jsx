@@ -8,45 +8,49 @@ import uuid from 'uuid/v4';
 class Project extends Component {
     render() {
         return (
-            <div className="uk-panel">
-                <div className="uk-button-group">
-                    <a className="uk-button" href="/#/">
-                        {'<--'}
-                    </a>
+            <div className="card">
+                <div className="card-block">
+                    <div className="card-header">
+                        <a className="btn btn-primary float-right" href="/#/">
+                            <i className="fa fa-reply" style={{ fontSize: '24px' }} />
+                        </a>
+                    </div>
+                    <h1 className="card-title">
+                        <InlineEdit
+                            text={this.props.project.name}
+                            paramName="name"
+                            change={data => this.props.configure(data)}
+                        />
+                    </h1>
+
+                    <h3 className="uk-panel-title">{this.props.match.params.uuid}</h3>
+                    <h2>Manager: {this.props.project.manager}</h2>
+                    <table className="uk-table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <InlineEdit
+                                        placeholder="Add summary"
+                                        text={this.props.project.summary ? this.props.project.summary : ''}
+                                        paramName="summary"
+                                        change={data => this.props.configure(data)}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <InlineEdit
+                                        placeholder="Add description"
+                                        text={this.props.project.description ? this.props.project.description : ''}
+                                        paramName="description"
+                                        change={data => this.props.configure(data)}
+                                        editingElement="textarea"
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <h1 className="uk-panel-title">
-                    <InlineEdit
-                        text={this.props.project.name}
-                        paramName="name"
-                        change={data => this.props.configure(data)}
-                    />
-                </h1>
-                <h3 className="uk-panel-title">{this.props.match.params.uuid}</h3>
-                <table className="uk-table">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <InlineEdit
-                                    placeholder="Add summary"
-                                    text={this.props.project.summary ? this.props.project.summary : ''}
-                                    paramName="summary"
-                                    change={data => this.props.configure(data)}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <InlineEdit
-                                    placeholder="Add description"
-                                    text={this.props.project.description ? this.props.project.description : ''}
-                                    paramName="description"
-                                    change={data => this.props.configure(data)}
-                                    editingElement="textarea"
-                                />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         );
     }

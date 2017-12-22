@@ -4,7 +4,6 @@
     "version": "99.99.99",
     "main": "dist/index.min.js",
     "dependencies": {
-        "fixed-data-table-2": "^0.8.8",
         "lodash": "^4.17.4",
         "markdown-to-jsx": "^6.3.1",
         "react": "15.4.0",
@@ -60,7 +59,6 @@
         "style-loader": "^0.19.1",
         "uglify-es": "^3.1.8",
         "uglify-es-webpack-plugin": "^0.10.0",
-        "uikit": "^2.0.0",
         "webpack": "^3.5.5",
         "webpack-dev-server": "^2.9.7"
     },

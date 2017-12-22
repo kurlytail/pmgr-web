@@ -10,9 +10,8 @@ import Project from './containers/project.jsx';
 import { StoreInfo } from './store';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 
-//import 'uikit';
-import './styles/uikit-theme.less';
-import './reducers/project';
+import './reducers';
+import './managers';
 
 render(
     <Provider store={StoreInfo.store}>

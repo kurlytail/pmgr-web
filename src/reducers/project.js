@@ -1,7 +1,6 @@
 import _ from 'lodash';
-import { injectReducer, runSaga, StoreInfo } from '../store';
+import { injectReducer } from '../store';
 import { createActions, handleActions } from 'redux-actions';
-import { call, put } from 'redux-saga/effects';
 
 function createProjectReducer() {
     const projectCreateAction = 'PROJECT_CREATE';
@@ -25,7 +24,7 @@ function createProjectReducer() {
         {
             [projectCreate]: (state, { payload: { uuid } }) => {
                 return Object.assign({}, state, {
-                    [uuid]: { deleted: false, name: 'Project Name' }
+                    [uuid]: { deleted: false, name: 'Project Name', manager: 'oracle' }
                 });
             },
             [projectConfigure]: (state, { payload: { uuid, data } }) => {

@@ -8,57 +8,63 @@ import uuid from 'uuid/v4';
 class ProjectList extends Component {
     render() {
         return (
-            <div className="uk-panel">
-                <table className="uk-table">
-                    <thead>
-                        <tr>
-                            <th>Project Name</th>
-                            <th>ID</th>
-                            <th>Summary</th>
-                            <th>
-                                <div className="uk-button-group">
-                                    <button className="uk-button uk-button-large" onClick={this.props.create}>
-                                        +
-                                    </button>
-                                    <button className="uk-button uk-button-large" onClick={this.props.gc}>
-                                        X
-                                    </button>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {_.map(_.omitBy(this.props.projects, project => project.deleted), (meta, uuid) => (
-                            <tr key={uuid}>
-                                <td>
-                                    <InlineEdit
-                                        text={this.props.projects[uuid].name}
-                                        paramName="name"
-                                        change={data => this.props.configure(uuid, data)}
-                                    />
-                                </td>
-                                <td>
-                                    <a href={'/#/projects/' + uuid}>{uuid}</a>
-                                </td>
-                                <td>
-                                    <InlineEdit
-                                        placeholder="Add summary"
-                                        text={
-                                            this.props.projects[uuid].summary ? this.props.projects[uuid].summary : ''
-                                        }
-                                        paramName="summary"
-                                        change={data => this.props.configure(uuid, data)}
-                                    />
-                                </td>
-                                <td>
-                                    <button className="uk-button" onClick={() => this.props.del(uuid)}>
-                                        X
-                                    </button>
-                                </td>
+            <div className="card">
+                <div className="card-block">
+                    <table className="table table-striped">
+                        <thead className="thead-inverse">
+                            <tr>
+                                <th>Project Name</th>
+                                <th>ID</th>
+                                <th>Manager</th>
+                                <th>Summary</th>
+                                <th>
+                                    <div className="btn-group">
+                                        <button className="btn btn-primary" onClick={this.props.create}>
+                                            <i className="fa fa-plus" style={{ fontSize: '24px' }} />
+                                        </button>
+                                        <button className="btn" onClick={this.props.gc}>
+                                            <i className="fa fa-trash" style={{ fontSize: '24px' }} />
+                                        </button>
+                                    </div>
+                                </th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {_.map(_.omitBy(this.props.projects, project => project.deleted), (meta, uuid) => (
+                                <tr key={uuid} scope="row">
+                                    <td>
+                                        <InlineEdit
+                                            text={this.props.projects[uuid].name}
+                                            paramName="name"
+                                            change={data => this.props.configure(uuid, data)}
+                                        />
+                                    </td>
+                                    <td>
+                                        <a href={'/#/projects/' + uuid}>{uuid}</a>
+                                    </td>
+                                    <td>{this.props.projects[uuid].manager}</td>
+                                    <td>
+                                        <InlineEdit
+                                            placeholder="Add summary"
+                                            text={
+                                                this.props.projects[uuid].summary
+                                                    ? this.props.projects[uuid].summary
+                                                    : ''
+                                            }
+                                            paramName="summary"
+                                            change={data => this.props.configure(uuid, data)}
+                                        />
+                                    </td>
+                                    <td>
+                                        <button className="btn" onClick={() => this.props.del(uuid)}>
+                                            <i className="fa fa-trash" style={{ fontSize: '24px' }} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }
