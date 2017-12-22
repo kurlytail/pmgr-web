@@ -15,9 +15,14 @@ class ProjectList extends Component {
                             <th>Project Name</th>
                             <th>ID</th>
                             <th>
-                                <button className="uk-button uk-button-large" onClick={this.props.create}>
-                                    +
-                                </button>
+                                <div className="uk-button-group">
+                                    <button className="uk-button uk-button-large" onClick={this.props.create}>
+                                        +
+                                    </button>
+                                    <button className="uk-button uk-button-large" onClick={this.props.gc}>
+                                        X
+                                    </button>
+                                </div>
                             </th>
                         </tr>
                     </thead>
@@ -61,6 +66,9 @@ const mapDispatch = dispatch => {
         },
         del: uuid => {
             dispatch(ProjectListReducer.projectDelete(uuid));
+        },
+        gc: uuid => {
+            dispatch(ProjectListReducer.projectGarbageCollect(uuid));
         },
         rename: (uuid, name) => {
             dispatch(ProjectListReducer.projectRename(uuid, name));

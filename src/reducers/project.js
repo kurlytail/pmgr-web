@@ -7,15 +7,19 @@ function createProjectReducer() {
     const projectCreateAction = 'PROJECT_CREATE';
     const projectDeleteAction = 'PROJECT_DELETE';
     const projectRenameAction = 'PROJECT_RENAME';
+    const projectGarbageCollectAction = 'PROJECT_GARBAGE_COLLECT';
+
     const actions = createActions({
         [projectCreateAction]: uuid => ({ uuid }),
         [projectRenameAction]: (uuid, name) => ({ uuid, name }),
-        [projectDeleteAction]: uuid => ({ uuid })
+        [projectDeleteAction]: uuid => ({ uuid }),
+        [projectGarbageCollectAction]: () => {}
     });
 
     const projectCreate = actions[_.camelCase(projectCreateAction)];
     const projectDelete = actions[_.camelCase(projectDeleteAction)];
     const projectRename = actions[_.camelCase(projectRenameAction)];
+    const projectGarbageCollect = actions[_.camelCase(projectGarbageCollectAction)];
 
     let reducer = handleActions(
         {
@@ -29,6 +33,15 @@ function createProjectReducer() {
             [projectDelete]: (state, { payload: { uuid } }) => {
                 let project = Object.assign({}, state[uuid], { deleted: true });
                 return Object.assign({}, state, { [uuid]: project });
+            },
+            [projectGarbageCollect]: (state) => {
+                let newState = {};
+                _.each(state, (project, uuid) => {
+                    if(!project.deleted) {
+                        newState[uuid] = project;
+                    }
+                });
+                return newState;
             }
         },
         {}
