@@ -14,6 +14,7 @@ class ProjectList extends Component {
                         <tr>
                             <th>Project Name</th>
                             <th>ID</th>
+                            <th>Summary</th>
                             <th>
                                 <div className="uk-button-group">
                                     <button className="uk-button uk-button-large" onClick={this.props.create}>
@@ -33,11 +34,21 @@ class ProjectList extends Component {
                                     <InlineEdit
                                         text={this.props.projects[uuid].name}
                                         paramName="name"
-                                        change={data => this.props.rename(uuid, data.name)}
+                                        change={data => this.props.configure(uuid, data)}
                                     />
                                 </td>
                                 <td>
                                     <a href={'/#/projects/' + uuid}>{uuid}</a>
+                                </td>
+                                <td>
+                                    <InlineEdit
+                                        placeholder="Add summary"
+                                        text={
+                                            this.props.projects[uuid].summary ? this.props.projects[uuid].summary : ''
+                                        }
+                                        paramName="summary"
+                                        change={data => this.props.configure(uuid, data)}
+                                    />
                                 </td>
                                 <td>
                                     <button className="uk-button" onClick={() => this.props.del(uuid)}>
@@ -70,8 +81,8 @@ const mapDispatch = dispatch => {
         gc: uuid => {
             dispatch(ProjectListReducer.projectGarbageCollect(uuid));
         },
-        rename: (uuid, name) => {
-            dispatch(ProjectListReducer.projectRename(uuid, name));
+        configure: (uuid, data) => {
+            dispatch(ProjectListReducer.projectConfigure(uuid, data));
         }
     };
 };

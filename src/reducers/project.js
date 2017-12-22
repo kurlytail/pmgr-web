@@ -6,38 +6,40 @@ import { call, put } from 'redux-saga/effects';
 function createProjectReducer() {
     const projectCreateAction = 'PROJECT_CREATE';
     const projectDeleteAction = 'PROJECT_DELETE';
-    const projectRenameAction = 'PROJECT_RENAME';
+    const projectConfigureAction = 'PROJECT_CONFIGURE';
     const projectGarbageCollectAction = 'PROJECT_GARBAGE_COLLECT';
 
     const actions = createActions({
         [projectCreateAction]: uuid => ({ uuid }),
-        [projectRenameAction]: (uuid, name) => ({ uuid, name }),
+        [projectConfigureAction]: (uuid, data) => ({ uuid, data }),
         [projectDeleteAction]: uuid => ({ uuid }),
         [projectGarbageCollectAction]: () => {}
     });
 
     const projectCreate = actions[_.camelCase(projectCreateAction)];
     const projectDelete = actions[_.camelCase(projectDeleteAction)];
-    const projectRename = actions[_.camelCase(projectRenameAction)];
+    const projectConfigure = actions[_.camelCase(projectConfigureAction)];
     const projectGarbageCollect = actions[_.camelCase(projectGarbageCollectAction)];
 
     let reducer = handleActions(
         {
             [projectCreate]: (state, { payload: { uuid } }) => {
-                return Object.assign({}, state, { [uuid]: { deleted: false, name: 'Project Name' } });
+                return Object.assign({}, state, {
+                    [uuid]: { deleted: false, name: 'Project Name' }
+                });
             },
-            [projectRename]: (state, { payload: { uuid, name } }) => {
-                let project = Object.assign({}, state[uuid], { deleted: false, name });
+            [projectConfigure]: (state, { payload: { uuid, data } }) => {
+                let project = Object.assign({}, state[uuid], { deleted: false, ...data });
                 return Object.assign({}, state, { [uuid]: project });
             },
             [projectDelete]: (state, { payload: { uuid } }) => {
                 let project = Object.assign({}, state[uuid], { deleted: true });
                 return Object.assign({}, state, { [uuid]: project });
             },
-            [projectGarbageCollect]: (state) => {
+            [projectGarbageCollect]: state => {
                 let newState = {};
                 _.each(state, (project, uuid) => {
-                    if(!project.deleted) {
+                    if (!project.deleted) {
                         newState[uuid] = project;
                     }
                 });

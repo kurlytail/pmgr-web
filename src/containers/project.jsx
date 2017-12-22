@@ -8,20 +8,45 @@ import uuid from 'uuid/v4';
 class Project extends Component {
     render() {
         return (
-            <div class="uk-panel">
+            <div className="uk-panel">
                 <div className="uk-button-group">
                     <a className="uk-button" href="/#/">
                         {'<--'}
                     </a>
                 </div>
-                <h1 class="uk-panel-title">
+                <h1 className="uk-panel-title">
                     <InlineEdit
                         text={this.props.project.name}
                         paramName="name"
-                        change={data => this.props.rename(data.name)}
+                        change={data => this.props.configure(data)}
                     />
                 </h1>
-                <h3 class="uk-panel-title">{this.props.match.params.uuid}</h3>
+                <h3 className="uk-panel-title">{this.props.match.params.uuid}</h3>
+                <table className="uk-table">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <InlineEdit
+                                    placeholder="Add summary"
+                                    text={this.props.project.summary ? this.props.project.summary : ''}
+                                    paramName="summary"
+                                    change={data => this.props.configure(data)}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <InlineEdit
+                                    placeholder="Add description"
+                                    text={this.props.project.description ? this.props.project.description : ''}
+                                    paramName="description"
+                                    change={data => this.props.configure(data)}
+                                    editingElement="textarea"
+                                />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         );
     }
@@ -38,8 +63,8 @@ const mapDispatch = (dispatch, props) => {
         del: () => {
             dispatch(ProjectListReducer.projectDelete(props.match.params.uuid));
         },
-        rename: name => {
-            dispatch(ProjectListReducer.projectRename(props.match.params.uuid, name));
+        configure: (...params) => {
+            dispatch(ProjectListReducer.projectConfigure(props.match.params.uuid, ...params));
         }
     };
 };
