@@ -51,7 +51,7 @@ function checkReducers(path) {
 
 const loadStorage = storage => {
     try {
-        const serializedState = storage.getItem('titan');
+        const serializedState = storage.getItem('pmgr');
         if (serializedState === null) {
             return undefined;
         }
@@ -64,7 +64,7 @@ const loadStorage = storage => {
 const saveStorage = (storage, globalState, key) => {
     var state = _.get(globalState, key);
     const serializedState = JSON.stringify(state);
-    storage.setItem('titan', serializedState);
+    storage.setItem('pmgr', serializedState);
 };
 
 /* Inject a reducer in a path. Please keep the tree very shallow
