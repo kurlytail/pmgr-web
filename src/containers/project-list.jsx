@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import InlineEdit from 'react-edit-inline';
 import _ from 'lodash';
-import ProjectListReducer from '../reducers/project-list';
+import ProjectListReducer from '../reducers/project';
 import uuid from 'uuid/v4';
 
 class ProjectList extends Component {
@@ -13,7 +13,7 @@ class ProjectList extends Component {
                     <thead>
                         <tr>
                             <th>Project Name</th>
-                            <th>UUID</th>
+                            <th>ID</th>
                             <th>
                                 <button className="uk-button uk-button-large" onClick={this.props.create}>
                                     +
@@ -24,10 +24,18 @@ class ProjectList extends Component {
                     <tbody>
                         {_.map(_.omitBy(this.props.projects, project => project.deleted), (meta, uuid) => (
                             <tr key={uuid}>
-                                <td>{this.props.app[uuid] ? this.props.app[uuid].name : 'Unkown'}</td>
-                                <td>{uuid}</td>
                                 <td>
-                                    <button className="uk-button uk-button" onClick={() => this.props.del(uuid)}>
+                                    <InlineEdit
+                                        text={this.props.projects[uuid].name}
+                                        paramName="name"
+                                        change={data => this.props.rename(uuid, data.name)}
+                                    />
+                                </td>
+                                <td>
+                                    <a href={'/#/projects/' + uuid}>{uuid}</a>
+                                </td>
+                                <td>
+                                    <button className="uk-button" onClick={() => this.props.del(uuid)}>
                                         X
                                     </button>
                                 </td>
@@ -42,8 +50,7 @@ class ProjectList extends Component {
 
 const mapProps = state => {
     return {
-        projects: state.app.local.projects,
-        app: state.app.local
+        projects: state.app.local.projects
     };
 };
 
@@ -54,6 +61,9 @@ const mapDispatch = dispatch => {
         },
         del: uuid => {
             dispatch(ProjectListReducer.projectDelete(uuid));
+        },
+        rename: (uuid, name) => {
+            dispatch(ProjectListReducer.projectRename(uuid, name));
         }
     };
 };

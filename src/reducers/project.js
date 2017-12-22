@@ -1,22 +1,30 @@
 import _ from 'lodash';
-import { injectReducer, StoreInfo } from '../store';
+import { injectReducer, runSaga, StoreInfo } from '../store';
 import { createActions, handleActions } from 'redux-actions';
+import { call, put } from 'redux-saga/effects';
 
-function createProjectReducer(uuid) {
-    const projectInitAction = `PROJECT_${uuid}_INIT`;
-    const projectDeleteAction = `PROJECT_${uuid}_DELETE`;
+function createProjectReducer() {
+    const projectCreateAction = 'PROJECT_CREATE';
+    const projectDeleteAction = 'PROJECT_DELETE';
+    const projectRenameAction = 'PROJECT_RENAME';
     const actions = createActions({
-        [projectInitAction]: (uuid, name) => ({ uuid, name }),
+        [projectCreateAction]: uuid => ({ uuid }),
+        [projectRenameAction]: (uuid, name) => ({ uuid, name }),
         [projectDeleteAction]: uuid => ({ uuid })
     });
 
-    const projectInit = actions[_.camelCase(projectInitAction)];
+    const projectCreate = actions[_.camelCase(projectCreateAction)];
     const projectDelete = actions[_.camelCase(projectDeleteAction)];
+    const projectRename = actions[_.camelCase(projectRenameAction)];
 
     let reducer = handleActions(
         {
-            [projectInit]: (state, { payload: { uuid } }) => {
-                return Object.assign({}, state, { [uuid]: { deleted: false, name } });
+            [projectCreate]: (state, { payload: { uuid } }) => {
+                return Object.assign({}, state, { [uuid]: { deleted: false, name: 'Project Name' } });
+            },
+            [projectRename]: (state, { payload: { uuid, name } }) => {
+                let project = Object.assign({}, state[uuid], { deleted: false, name });
+                return Object.assign({}, state, { [uuid]: project });
             },
             [projectDelete]: (state, { payload: { uuid } }) => {
                 let project = Object.assign({}, state[uuid], { deleted: true });
@@ -26,20 +34,12 @@ function createProjectReducer(uuid) {
         {}
     );
 
-    injectReducer(`app.local.${uuid}`, reducer);
+    injectReducer('app.local.projects', reducer);
     Object.assign(reducer, actions);
 
     return reducer;
 }
 
-function projectInit() {
-    let state = StoreInfo.store;
-    let uuids = _.keys(_.get(state, 'app.local.projects'));
-    _.forEach(uuids, uuid => {
-        createProjectReducer(uuid);
-    });
-}
+let _reducer = createProjectReducer();
 
-
-projectInit();
-export default createProjectReducer;
+export default _reducer;
