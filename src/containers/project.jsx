@@ -8,23 +8,20 @@ import uuid from 'uuid/v4';
 class Project extends Component {
     render() {
         return (
-            <div className="card">
-                <div className="card-block">
-                    <div className="card-header">
-                        <a className="btn btn-primary float-right" href="/#/">
-                            <i className="fa fa-reply" style={{ fontSize: '24px' }} />
-                        </a>
-                    </div>
-                    <h1 className="card-title">
+            <div className="panel panel-default">
+                <div className="panel-heading">
+                    <h1 className="panel-title">
                         <InlineEdit
                             text={this.props.project.name}
                             paramName="name"
                             change={data => this.props.configure(data)}
+                            className="h1"
                         />
                     </h1>
-
                     <h3>{this.props.match.params.uuid}</h3>
-                    <h2>Manager: {this.props.project.manager}</h2>
+                    <h3>Manager: {this.props.project.manager}</h3>
+                </div>
+                <div className="panel-body">
                     <table className="table">
                         <tbody>
                             <tr>

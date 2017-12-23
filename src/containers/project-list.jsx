@@ -11,7 +11,7 @@ class ProjectList extends Component {
             <div className="card">
                 <div className="card-block">
                     <table className="table table-striped">
-                        <thead className="thead-inverse">
+                        <thead>
                             <tr>
                                 <th>Project Name</th>
                                 <th>ID</th>
@@ -19,12 +19,12 @@ class ProjectList extends Component {
                                 <th>Summary</th>
                                 <th>
                                     <div className="btn-group">
-                                        <button className="btn btn-primary" onClick={this.props.create}>
-                                            <i className="fa fa-plus" />
-                                        </button>
-                                        <button className="btn" onClick={this.props.gc}>
+                                        <a onClick={this.props.gc}>
                                             <i className="fa fa-trash" />
-                                        </button>
+                                        </a>
+                                        <a onClick={this.props.create} style={{ paddingLeft: '30px' }}>
+                                            <i className="fa fa-plus" />
+                                        </a>
                                     </div>
                                 </th>
                             </tr>
@@ -56,9 +56,9 @@ class ProjectList extends Component {
                                         />
                                     </td>
                                     <td>
-                                        <button className="btn" onClick={() => this.props.del(uuid)}>
+                                        <a onClick={() => this.props.del(uuid)}>
                                             <i className="fa fa-trash" />
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
                             ))}

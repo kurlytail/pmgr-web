@@ -6,6 +6,7 @@ import ProjectTypeList from './project-type-list.jsx';
 import { Route } from 'react-router-dom';
 import FileDownload from 'react-file-download';
 import ReactFileReader from 'react-file-reader';
+import { StoreInfo } from '../store';
 
 class MainContainer extends Component {
     saveConfiguration() {
@@ -26,40 +27,42 @@ class MainContainer extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div className="container-fluid">
                 <nav className="navbar navbar-default">
-                    <div className="container-fluid">
-                        <ul className="nav navbar-nav">
-                            <li className="active">
-                                <a href="#">
-                                    Projects <span className="sr-only">(current)</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#/project-type">Project Types
-                                <span className="sr-only">(current)</span></a>
-                            </li>
-                        </ul>
-                        <ul className="nav navbar-nav pull-right">
-                            <li>
-                                <button className="btn" onClick={this.saveConfiguration}>
-                                    <i className="fa fa-floppy-o" />
-                                </button>
-                            </li>
-                            <li>
-                                <button className="btn">
-                                    <ReactFileReader
-                                        fileTypes={['.json']}
-                                        base64={true}
-                                        multipleFiles={false}
-                                        handleFiles={this.handleConfigUpload}
-                                    >
-                                        <i className="fa fa-folder-open" />
-                                    </ReactFileReader>
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul className="nav navbar-nav">
+                        <li>
+                            <a onClick={StoreInfo.history.goBack}>
+                                <i className="fa fa-arrow-left" />
+                            </a>
+                        </li>
+                    </ul>
+                    <ul className="nav navbar-nav" style={{ paddingLeft: '30px' }}>
+                        <li className="active">
+                            <a href="#">
+                                Projects <span className="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#/project-type">Project Types</a>
+                        </li>
+                    </ul>
+                    <ul className="nav navbar-nav pull-right">
+                        <li style={{ paddingLeft: '30px' }}>
+                            <a onClick={this.saveConfiguration}>
+                                <i className="fa fa-floppy-o" />
+                            </a>
+                        </li>
+                        <li style={{ paddingLeft: '30px', paddingRight: '30px' }}>
+                            <ReactFileReader
+                                fileTypes={['.json']}
+                                base64={true}
+                                multipleFiles={false}
+                                handleFiles={this.handleConfigUpload}
+                            >
+                                <i className="fa fa-folder-open" />
+                            </ReactFileReader>
+                        </li>
+                    </ul>
                 </nav>
                 <main>
                     <Route path="/" exact component={ProjectList} />

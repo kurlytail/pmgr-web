@@ -9,6 +9,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import './reducers';
 import './managers';
+import './styles/style.css';
 
 render(
     <Provider store={StoreInfo.store}>
