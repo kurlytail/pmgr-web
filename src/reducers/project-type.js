@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { injectReducer } from '../store';
+import { injectReducer, StoreInfo } from '../store';
 import { createActions, handleActions } from 'redux-actions';
 import Elaborate from '../elaborate';
 
@@ -26,6 +26,9 @@ function createprojectTypeReducer() {
     const projectTypeSetActivity = actions[_.camelCase(projectTypeSetActivityAction)];
     const projectTypeConfigure = actions[_.camelCase(projectTypeConfigureAction)];
     const projectTypeGarbageCollect = actions[_.camelCase(projectTypeGarbageCollectAction)];
+
+    let defaultState = _.get(StoreInfo.store.getState(), 'app.local.projectTypes');
+    defaultState = defaultState ? defaultState : {};
 
     let reducer = handleActions(
         {
@@ -72,7 +75,7 @@ function createprojectTypeReducer() {
                 return newState;
             }
         },
-        {}
+        defaultState
     );
 
     injectReducer('app.local.projectTypes', reducer);

@@ -34,6 +34,7 @@ class Project extends Component {
                                     />
                                 </td>
                             </tr>
+                            <tr/>
                             <tr>
                                 <td>
                                     <InlineEdit

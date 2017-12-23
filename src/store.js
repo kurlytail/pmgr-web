@@ -94,9 +94,6 @@ function injectReducer(path, asyncReducer) {
                 app: {
                     local: localState,
                     session: sessionState
-                },
-                global: {
-                    routing: {}
                 }
             },
             enhancer
