@@ -5,10 +5,17 @@ import _ from 'lodash';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import TH from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import { routerReducer } from 'react-router-redux';
+import { routerReducer, routerMiddleware } from 'react-router-redux';
+import createHistory from 'history/createHashHistory';
+
+var StoreInfo = {
+    asyncReducers: {},
+    store: null,
+    history: createHistory()
+};
 
 const sagaMiddleware = createSagaMiddleware();
-const enhancer = composeWithDevTools(applyMiddleware(TH, sagaMiddleware));
+const enhancer = composeWithDevTools(applyMiddleware(TH, sagaMiddleware, routerMiddleware(StoreInfo.history)));
 var globalAsyncReducers = {};
 
 /* Create a reducer, the heirarchy or reducers is visited and reducers
@@ -33,11 +40,6 @@ function createReducer(asyncReducers, pathPrefix) {
 
     return reducer;
 }
-
-var StoreInfo = {
-    asyncReducers: {},
-    store: null
-};
 
 function checkReducer(path) {
     return globalAsyncReducers['.' + path];
@@ -113,7 +115,7 @@ function runSaga(saga) {
 
 /* This needs to be injected early because the router modules starts looking
    for state immediately on load */
-injectReducer('global.routing', routerReducer);
+injectReducer('routing', routerReducer);
 
 export { StoreInfo, checkReducer, injectReducer, checkReducers, runSaga };
 

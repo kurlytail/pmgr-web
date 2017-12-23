@@ -40,7 +40,7 @@ class ProjectList extends Component {
                                         />
                                     </td>
                                     <td>
-                                        <a href={'/#/projects/' + uuid}>{uuid}</a>
+                                        <a href={'/#/project/' + uuid}>{uuid}</a>
                                     </td>
                                     <td>{this.props.projects[uuid].manager}</td>
                                     <td>

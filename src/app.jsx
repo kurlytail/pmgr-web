@@ -1,26 +1,20 @@
-import { createLogger } from 'redux-logger';
-import { applyMiddleware, createStore, compose } from 'redux';
-import { hashHistory as importedHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import ProjectList from './containers/project-list.jsx';
-import Project from './containers/project.jsx';
 import { StoreInfo } from './store';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+import MainContainer from './containers/main.jsx';
+import { ConnectedRouter } from 'react-router-redux';
+import { Route, Switch } from 'react-router-dom';
 
 import './reducers';
 import './managers';
 
 render(
     <Provider store={StoreInfo.store}>
-        <HashRouter>
-            <Switch>
-                <Route exact path="/" component={ProjectList} />
-                <Route path="/projects/:uuid" component={Project} />
-            </Switch>
-        </HashRouter>
+        <ConnectedRouter history={StoreInfo.history}>
+            <MainContainer/>
+        </ConnectedRouter>
     </Provider>,
     document.getElementById('root')
 );
