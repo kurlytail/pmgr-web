@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import InlineEdit from 'react-edit-inline';
 import _ from 'lodash';
-import ProjectListReducer from '../reducers/project';
+import ProjectTypeListReducer from '../reducers/project-type';
 import uuid from 'uuid/v4';
 
-class ProjectList extends Component {
+class ProjectTypeList extends Component {
     render() {
         return (
             <div className="card">
@@ -13,42 +13,40 @@ class ProjectList extends Component {
                     <table className="table table-striped">
                         <thead className="thead-inverse">
                             <tr>
-                                <th>Project Name</th>
+                                <th>Project Type</th>
                                 <th>ID</th>
-                                <th>Manager</th>
                                 <th>Summary</th>
                                 <th>
                                     <div className="btn-group">
                                         <button className="btn btn-primary" onClick={this.props.create}>
-                                            <i className="fa fa-plus" />
+                                            <i className="fa fa-plus" style={{ fontSize: '24px' }} />
                                         </button>
                                         <button className="btn" onClick={this.props.gc}>
-                                            <i className="fa fa-trash" />
+                                            <i className="fa fa-trash" style={{ fontSize: '24px' }} />
                                         </button>
                                     </div>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {_.map(_.omitBy(this.props.projects, project => project.deleted), (meta, uuid) => (
+                            {_.map(_.omitBy(this.props.projectTypes, project => project.deleted), (meta, uuid) => (
                                 <tr key={uuid} scope="row">
                                     <td>
                                         <InlineEdit
-                                            text={this.props.projects[uuid].name}
+                                            text={this.props.projectTypes[uuid].name}
                                             paramName="name"
                                             change={data => this.props.configure(uuid, data)}
                                         />
                                     </td>
                                     <td>
-                                        <a href={'/#/project/' + uuid}>{uuid}</a>
+                                        <a href={'/#/project-types/' + uuid}>{uuid}</a>
                                     </td>
-                                    <td>{this.props.projects[uuid].manager}</td>
                                     <td>
                                         <InlineEdit
                                             placeholder="Add summary"
                                             text={
-                                                this.props.projects[uuid].summary
-                                                    ? this.props.projects[uuid].summary
+                                                this.props.projectTypes[uuid].summary
+                                                    ? this.props.projectTypes[uuid].summary
                                                     : ''
                                             }
                                             paramName="summary"
@@ -57,7 +55,7 @@ class ProjectList extends Component {
                                     </td>
                                     <td>
                                         <button className="btn" onClick={() => this.props.del(uuid)}>
-                                            <i className="fa fa-trash" />
+                                            <i className="fa fa-trash" style={{ fontSize: '24px' }} />
                                         </button>
                                     </td>
                                 </tr>
@@ -72,26 +70,26 @@ class ProjectList extends Component {
 
 const mapProps = state => {
     return {
-        projects: state.app.local.projects
+        projectTypes: state.app.local.projectTypes
     };
 };
 
 const mapDispatch = dispatch => {
     return {
         create: () => {
-            dispatch(ProjectListReducer.projectCreate(uuid()));
+            dispatch(ProjectTypeListReducer.projectTypeCreate(uuid()));
         },
         del: uuid => {
-            dispatch(ProjectListReducer.projectDelete(uuid));
+            dispatch(ProjectTypeListReducer.projectTypeDelete(uuid));
         },
         gc: uuid => {
-            dispatch(ProjectListReducer.projectGarbageCollect(uuid));
+            dispatch(ProjectTypeListReducer.projectTypeGarbageCollect(uuid));
         },
         configure: (uuid, data) => {
-            dispatch(ProjectListReducer.projectConfigure(uuid, data));
+            dispatch(ProjectTypeListReducer.projectTypeConfigure(uuid, data));
         }
     };
 };
 
-const projectList = connect(mapProps, mapDispatch)(ProjectList);
-export default projectList;
+const projectTypeList = connect(mapProps, mapDispatch)(ProjectTypeList);
+export default projectTypeList;
