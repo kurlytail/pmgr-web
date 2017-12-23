@@ -23,9 +23,9 @@ class Project extends Component {
                         />
                     </h1>
 
-                    <h3 className="uk-panel-title">{this.props.match.params.uuid}</h3>
+                    <h3>{this.props.match.params.uuid}</h3>
                     <h2>Manager: {this.props.project.manager}</h2>
-                    <table className="uk-table">
+                    <table className="table">
                         <tbody>
                             <tr>
                                 <td>

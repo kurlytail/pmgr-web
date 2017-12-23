@@ -39,7 +39,7 @@ class ProjectTypeList extends Component {
                                         />
                                     </td>
                                     <td>
-                                        <a href={'/#/project-types/' + uuid}>{uuid}</a>
+                                        <a href={'/#/project-type/' + uuid}>{uuid}</a>
                                     </td>
                                     <td>
                                         <InlineEdit
@@ -70,7 +70,7 @@ class ProjectTypeList extends Component {
 
 const mapProps = state => {
     return {
-        projectTypes: state.app.local.projectTypes
+        projectTypes: _.get(state, 'app.local.projectTypes')
     };
 };
 
