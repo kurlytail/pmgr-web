@@ -1,4 +1,4 @@
-import './null';
-import './oracle';
-import { newManager } from './factory';
-export default newManager;
+import './null.jsx';
+import './oracle.jsx';
+import { newManager, getAllManagers } from './factory';
+export { newManager, getAllManagers };

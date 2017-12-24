@@ -84,19 +84,25 @@ const config = {
                 loader: 'babel-loader'
             },
             {
-                test : /\.css$/,
+                test: /\.css$/,
                 loader: 'style-loader'
             },
             {
-                test : /\.css$/,
+                test: /\.css$/,
                 loader: 'css-loader',
                 query: {
                     modules: true,
                     localIdentName: '[name]__[local]___[hash:base64:5]'
-                }
+                },
+                include: path.join(__dirname, 'src')
             },
             {
-                test : /\.less$/,
+                test: /\.css$/,
+                loader: 'css-loader',
+                include: path.join(__dirname, 'node_modules')
+            },
+            {
+                test: /\.less$/,
                 use: [
                     {
                         loader: 'style-loader'
@@ -106,20 +112,16 @@ const config = {
                     },
                     {
                         loader: 'less-loader'
-                    },
+                    }
                 ]
             },
             {
                 test: /\.(png|svg|jpg|gif)$/,
-                loader: [
-                    'file-loader'
-                ]
+                loader: ['file-loader']
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
-                loader: [
-                    'file-loader'
-                ]
+                loader: ['file-loader']
             }
         ]
     },

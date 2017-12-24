@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 var factory = {};
 function register(name, managerClass) {
     factory[name] = managerClass;
@@ -10,4 +12,8 @@ function newManager(name) {
     return new factory[name]();
 }
 
-export { register, newManager };
+function getAllManagers() {
+    return _.keys(factory);
+}
+
+export { register, newManager, getAllManagers };

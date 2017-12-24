@@ -1,4 +1,5 @@
 import './null';
 import './manual';
-import {newActivity} from './factory';
-export default newActivity;
+import './ignore';
+import { newActivity, getAllActivities } from './factory';
+export { newActivity, getAllActivities };

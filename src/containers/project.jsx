@@ -4,22 +4,46 @@ import InlineEdit from 'react-edit-inline';
 import _ from 'lodash';
 import ProjectListReducer from '../reducers/project';
 import uuid from 'uuid/v4';
+import { getAllManagers, newManager } from '../managers';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 
 class Project extends Component {
     render() {
+        var managerOptions = _.map(getAllManagers(), value => {
+            return { value: value, label: _.startCase(value) };
+        });
         return (
             <div className="panel panel-default">
                 <div className="panel-heading">
-                    <h1 className="panel-title">
-                        <InlineEdit
-                            text={this.props.project.name}
-                            paramName="name"
-                            change={data => this.props.configure(data)}
-                            className="h1"
-                        />
-                    </h1>
-                    <h3>{this.props.match.params.uuid}</h3>
-                    <h3>Manager: {this.props.project.manager}</h3>
+                    <div className="row">
+                        <div className="col col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                            <h1 className="panel-title">
+                                <InlineEdit
+                                    text={this.props.project.name}
+                                    paramName="name"
+                                    change={data => this.props.configure(data)}
+                                    className="h1"
+                                    activeClassName="h1"
+                                />
+                            </h1>
+                            <h3>{this.props.match.params.uuid}</h3>
+                        </div>
+                        <div className="col col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                            <div className="pull-right">{newManager(this.props.project.manager).avatar()}</div>
+                            <h3>
+                                <Select
+                                    name="manager"
+                                    options={managerOptions}
+                                    clearable={false}
+                                    value={this.props.project.manager}
+                                    simpleValue
+                                    searchable={false}
+                                    onChange={newValue => this.props.configure({ manager: newValue })}
+                                />
+                            </h3>
+                        </div>
+                    </div>
                 </div>
                 <div className="panel-body">
                     <table className="table">
@@ -34,7 +58,7 @@ class Project extends Component {
                                     />
                                 </td>
                             </tr>
-                            <tr/>
+                            <tr />
                             <tr>
                                 <td>
                                     <InlineEdit

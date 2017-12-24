@@ -3,6 +3,8 @@ import Elaborate from '../elaborate';
 import _ from 'lodash';
 import ProjectReducer from '../reducers/project';
 import { register } from './factory';
+import React from 'react';
+import avatar from './null.svg';
 
 class Manager {
     *manageProject(action) {
@@ -22,6 +24,10 @@ class Manager {
         }
 
         yield all([takeEvery(ProjectReducer.projectConfigure, this.manageProject.bind(this))]);
+    }
+
+    avatar(dim = 100) {
+        return <img src={avatar} height={dim} width={dim}/>;
     }
 }
 

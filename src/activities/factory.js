@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 var factory = {};
 function register(name, activityClass) {
     factory[name] = activityClass;
@@ -10,4 +12,8 @@ function newActivity(name) {
     return new factory[name]();
 }
 
-export { register, newActivity };
+function getAllActivities() {
+    return _.keys(factory);
+}
+
+export { register, newActivity, getAllActivities };

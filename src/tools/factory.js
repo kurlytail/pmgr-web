@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 var factory = {};
 function register(name, toolClass) {
     factory[name] = toolClass;
@@ -10,4 +12,9 @@ function newTool(name) {
     return new factory[name]();
 }
 
-export { register, newTool };
+
+function getAllTools() {
+    return _.keys(factory);
+}
+
+export { register, newTool, getAllTools };

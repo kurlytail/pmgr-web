@@ -9,6 +9,9 @@ import ReactFileReader from 'react-file-reader';
 import { StoreInfo } from '../store';
 
 class MainContainer extends Component {
+    constructor(props) {
+        super(props);
+    }
     saveConfiguration() {
         const csv = localStorage['pmgr'];
         FileDownload(csv, 'pmgr.json');
@@ -26,6 +29,19 @@ class MainContainer extends Component {
     }
 
     render() {
+        $(document).ready(function() {
+            // -----------------------------------------------------------------------
+            $.each($('nav').find('li'), function() {
+                $(this).toggleClass(
+                    'active',
+                    window.location.hash ===
+                        $(this)
+                            .find('a')
+                            .attr('href')
+                );
+            });
+            // -----------------------------------------------------------------------
+        });
         return (
             <div className="container-fluid">
                 <nav className="navbar navbar-default">
@@ -38,9 +54,7 @@ class MainContainer extends Component {
                     </ul>
                     <ul className="nav navbar-nav" style={{ paddingLeft: '30px' }}>
                         <li className="active">
-                            <a href="#">
-                                Projects <span className="sr-only">(current)</span>
-                            </a>
+                            <a href="#/">Projects</a>
                         </li>
                         <li>
                             <a href="#/project-type">Project Types</a>

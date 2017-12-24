@@ -1,4 +1,5 @@
 import './null';
 import './manual';
-import {newTool} from './factory';
-export default newTool;
+import './ignore';
+import { newTool, getAllTools } from './factory';
+export { newTool, getAllTools };

@@ -4,9 +4,15 @@ import InlineEdit from 'react-edit-inline';
 import _ from 'lodash';
 import ProjectListReducer from '../reducers/project';
 import uuid from 'uuid/v4';
+import { getAllManagers, newManager } from '../managers';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 
 class ProjectList extends Component {
     render() {
+        var managerOptions = _.map(getAllManagers(), value => {
+            return { value: value, label: _.startCase(value) };
+        });
         return (
             <div className="card">
                 <div className="card-block">
@@ -16,6 +22,7 @@ class ProjectList extends Component {
                                 <th>Project Name</th>
                                 <th>ID</th>
                                 <th>Manager</th>
+                                <th/>
                                 <th>Summary</th>
                                 <th>
                                     <div className="btn-group">
@@ -42,7 +49,18 @@ class ProjectList extends Component {
                                     <td>
                                         <a href={'/#/project/' + uuid}>{uuid}</a>
                                     </td>
-                                    <td>{this.props.projects[uuid].manager}</td>
+                                    <td>
+                                        <Select
+                                            name="manager"
+                                            options={managerOptions}
+                                            clearable={false}
+                                            value={this.props.projects[uuid].manager}
+                                            simpleValue
+                                            searchable={false}
+                                            onChange={newValue => this.props.configure(uuid, { manager: newValue })}
+                                        />
+                                    </td>
+                                    <td>{newManager(this.props.projects[uuid].manager).avatar(40)}</td>
                                     <td>
                                         <InlineEdit
                                             placeholder="Add summary"

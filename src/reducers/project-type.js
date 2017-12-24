@@ -35,11 +35,11 @@ function createprojectTypeReducer() {
             [projectTypeCreate]: (state, { payload: { uuid } }) => {
                 let activities = {};
                 _.forEach(Elaborate.Activities, activity => {
-                    activities[activity.name] = 'null';
+                    activities[activity.name] = 'ignore';
                 });
                 let tools = {};
                 _.forEach(Elaborate.Tools, tool => {
-                    tools[tool.name] = 'null';
+                    tools[tool.name] = 'ignore';
                 });
                 let projectType = { deleted: false, name: 'Project Type Name', activities, tools };
 
