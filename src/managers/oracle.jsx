@@ -4,8 +4,12 @@ import React from 'react';
 import avatar from './oracle.svg';
 
 class Manager {
-    *initialize() {
-        yield select();
+    *processProject() {
+
+    }
+
+    config(project) {
+
     }
 
     avatar(dim = 100) {

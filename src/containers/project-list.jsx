@@ -13,6 +13,9 @@ class ProjectList extends Component {
         var managerOptions = _.map(getAllManagers(), value => {
             return { value: value, label: _.startCase(value) };
         });
+        var projectTypeOptions = _.map(this.props.types, (value, key) => {
+            return { value: key, label: value.name };
+        });
         return (
             <div className="card">
                 <div className="card-block">
@@ -22,7 +25,8 @@ class ProjectList extends Component {
                                 <th>Project Name</th>
                                 <th>ID</th>
                                 <th>Manager</th>
-                                <th/>
+                                <th />
+                                <th>Type</th>
                                 <th>Summary</th>
                                 <th>
                                     <div className="btn-group">
@@ -62,6 +66,17 @@ class ProjectList extends Component {
                                     </td>
                                     <td>{newManager(this.props.projects[uuid].manager).avatar(40)}</td>
                                     <td>
+                                        <Select
+                                            name="type"
+                                            options={projectTypeOptions}
+                                            clearable={false}
+                                            value={this.props.projects[uuid].type}
+                                            simpleValue
+                                            searchable={false}
+                                            onChange={newValue => this.props.configure(uuid, { type: newValue })}
+                                        />
+                                    </td>
+                                    <td>
                                         <InlineEdit
                                             placeholder="Add summary"
                                             text={
@@ -90,7 +105,8 @@ class ProjectList extends Component {
 
 const mapProps = state => {
     return {
-        projects: state.app.local.projects
+        projects: state.app.local.projects,
+        types: state.app.local.projectTypes
     };
 };
 

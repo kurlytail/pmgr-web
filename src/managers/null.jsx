@@ -7,28 +7,15 @@ import React from 'react';
 import avatar from './null.svg';
 
 class Manager {
-    *manageProject(action) {
-        let state = yield select();
-        _.get(state, `app.local.projects.${action.uuid}`);
 
-        _.filter(Elaborate.Documents, document => !document.input || document.input.length === 0);
-    }
+    config(project) {}
 
-    *initialize() {
-        /* Check existing projects */
-        let state = yield select();
-        let projects = _.keys(_.get(state, 'app.local.projects'));
-
-        for (var i in projects) {
-            yield fork(this.manageProject.bind(this), { uuid: projects[i] });
-        }
-
-        yield all([takeEvery(ProjectReducer.projectConfigure, this.manageProject.bind(this))]);
-    }
+    *processProject(project) {}
 
     avatar(dim = 100) {
-        return <img src={avatar} height={dim} width={dim}/>;
+        return <img src={avatar} height={dim} width={dim} />;
     }
+
 }
 
 register('null', Manager);
