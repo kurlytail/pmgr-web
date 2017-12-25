@@ -7,8 +7,7 @@ var DEBUG = require('debug')('managers/oracle');
 class Manager {
 
     *processProject(uuid) {
-        let state = yield select();
-        let project = _.get(state, `app.local.projects.${uuid}`);
+        let project = yield select(_.get, `app.local.projects.${uuid}`);
 
         DEBUG(`Oracle processing project ${uuid} -- ${project.name}`);
     }

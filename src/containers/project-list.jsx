@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import InlineEdit from 'react-edit-inline';
 import _ from 'lodash';
 import ProjectListReducer from '../reducers/project';
+import DocumentReducer from '../reducers/project';
 import uuid from 'uuid/v4';
 import { getAllManagers, newManager } from '../managers';
 import Select from 'react-select';
@@ -30,9 +31,6 @@ class ProjectList extends Component {
                                 <th>Summary</th>
                                 <th>
                                     <div className="btn-group">
-                                        <a onClick={this.props.gc}>
-                                            <i className="fa fa-trash" />
-                                        </a>
                                         <a onClick={this.props.create} style={{ paddingLeft: '30px' }}>
                                             <i className="fa fa-plus" />
                                         </a>
@@ -117,9 +115,6 @@ const mapDispatch = dispatch => {
         },
         del: uuid => {
             dispatch(ProjectListReducer.projectDelete(uuid));
-        },
-        gc: uuid => {
-            dispatch(ProjectListReducer.projectGarbageCollect(uuid));
         },
         configure: (uuid, data) => {
             dispatch(ProjectListReducer.projectConfigure(uuid, data));

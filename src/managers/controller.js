@@ -1,5 +1,6 @@
-import ProjectReducer from '../reducers/project.js';
-import { call, select, takeLatest, fork, all } from 'redux-saga/effects';
+import ProjectReducer from '../reducers/project';
+import DocumentReducer from '../reducers/document';
+import { call, select, takeEvery, fork, all, put } from 'redux-saga/effects';
 import { newManager } from './factory.js';
 import { runSaga } from '../store';
 import _ from 'lodash';
@@ -10,9 +11,8 @@ function* processProject(action) {
     let uuid = action.payload.uuid;
     DEBUG(`Processing project ${uuid}`);
 
-    let state = yield select();
-    let project = _.get(state, `app.local.projects.${uuid}`);
-    var manager;
+    let project = yield select(_.get, `app.local.projects.${uuid}`);
+    let manager;
 
     if (project.manager) {
         manager = newManager(project.manager);
@@ -27,11 +27,33 @@ function* processProject(action) {
 function* projectWatcher() {
     DEBUG('Watching projects');
 
-    let state = yield select();
-    for (var uuid in _.get(state, 'app.local.projects')) {
+    let projects = yield select(_.get, 'app.local.projects');
+    for (var uuid in projects) {
         yield fork(processProject, { payload: { uuid } });
     }
-    yield all(takeLatest(ProjectReducer.projectConfigure, processProject));
+    yield all([takeEvery(ProjectReducer.projectConfigureAction, processProject)]);
+}
+
+function* processProjectDelete(action) {
+    let uuid = action.payload.uuid;
+
+    let project = yield select(_.get, `app.local.projects.${uuid}`);
+    if (!project.deleted) return;
+
+    DEBUG(`Garbage collecting project ${uuid}`);
+    yield put(DocumentReducer.documentProjectDelete(uuid));
+    yield put(ProjectReducer.projectGarbageCollect(uuid));
+}
+
+function* projectDeleter() {
+    DEBUG('Garbage collecting projects');
+
+    let projects = yield select(_.get, 'app.local.projects');
+    for (var uuid in projects) {
+        yield fork(processProjectDelete, { payload: { uuid } });
+    }
+    yield all([takeEvery(ProjectReducer.projectDeleteAction, processProjectDelete)]);
 }
 
 runSaga(projectWatcher);
+runSaga(projectDeleter);

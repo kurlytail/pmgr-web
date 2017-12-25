@@ -86,21 +86,20 @@ function injectReducer(path, asyncReducer) {
         StoreInfo.store.replaceReducer(reducer);
     } else {
         const localState = loadStorage(localStorage);
-        const sessionState = loadStorage(sessionStorage);
+        //const sessionState = loadStorage(sessionStorage);
 
         StoreInfo.store = createStore(
             reducer,
             {
                 app: {
-                    local: localState,
-                    session: sessionState
+                    local: localState
                 }
             },
             enhancer
         );
 
         StoreInfo.store.subscribe(() => saveStorage(localStorage, StoreInfo.store.getState(), 'app.local'));
-        StoreInfo.store.subscribe(() => saveStorage(sessionStorage, StoreInfo.store.getState(), 'app.session'));
+        //StoreInfo.store.subscribe(() => saveStorage(sessionStorage, StoreInfo.store.getState(), 'app.session'));
     }
 
     return asyncReducer;

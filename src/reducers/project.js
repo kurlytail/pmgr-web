@@ -3,22 +3,24 @@ import { injectReducer, StoreInfo } from '../store';
 import { createActions, handleActions } from 'redux-actions';
 
 function createProjectReducer() {
-    const projectCreateAction = 'PROJECT_CREATE';
-    const projectDeleteAction = 'PROJECT_DELETE';
-    const projectConfigureAction = 'PROJECT_CONFIGURE';
-    const projectGarbageCollectAction = 'PROJECT_GARBAGE_COLLECT';
+    let actionNames = {
+        projectCreateAction: 'PROJECT_CREATE',
+        projectDeleteAction: 'PROJECT_DELETE',
+        projectConfigureAction: 'PROJECT_CONFIGURE',
+        projectGarbageCollectAction: 'PROJECT_GARBAGE_COLLECT'
+    };
 
     const actions = createActions({
-        [projectCreateAction]: uuid => ({ uuid }),
-        [projectConfigureAction]: (uuid, data) => ({ uuid, data }),
-        [projectDeleteAction]: uuid => ({ uuid }),
-        [projectGarbageCollectAction]: () => {}
+        [actionNames.projectCreateAction]: uuid => ({ uuid }),
+        [actionNames.projectConfigureAction]: (uuid, data) => ({ uuid, data }),
+        [actionNames.projectDeleteAction]: uuid => ({ uuid }),
+        [actionNames.projectGarbageCollectAction]: uuid => ({ uuid })
     });
 
-    const projectCreate = actions[_.camelCase(projectCreateAction)];
-    const projectDelete = actions[_.camelCase(projectDeleteAction)];
-    const projectConfigure = actions[_.camelCase(projectConfigureAction)];
-    const projectGarbageCollect = actions[_.camelCase(projectGarbageCollectAction)];
+    const projectCreate = actions[_.camelCase(actionNames.projectCreateAction)];
+    const projectDelete = actions[_.camelCase(actionNames.projectDeleteAction)];
+    const projectConfigure = actions[_.camelCase(actionNames.projectConfigureAction)];
+    const projectGarbageCollect = actions[_.camelCase(actionNames.projectGarbageCollectAction)];
 
     let defaultState = _.get(StoreInfo.store.getState(), 'app.local.projects');
     defaultState = defaultState ? defaultState : {};
@@ -38,21 +40,20 @@ function createProjectReducer() {
                 let project = Object.assign({}, state[uuid], { deleted: true });
                 return Object.assign({}, state, { [uuid]: project });
             },
-            [projectGarbageCollect]: state => {
-                let newState = {};
-                _.each(state, (project, uuid) => {
-                    if (!project.deleted) {
-                        newState[uuid] = project;
-                    }
-                });
-                return newState;
+            [projectGarbageCollect]: (state, { payload: { uuid } }) => {
+                if (state[uuid] && state[uuid].deleted) {
+                    let newState = _.clone(state);
+                    delete newState[uuid];
+                    return newState;
+                }
+                return state;
             }
         },
         defaultState
     );
 
     injectReducer('app.local.projects', reducer);
-    Object.assign(reducer, actions);
+    Object.assign(reducer, actions, actionNames);
 
     return reducer;
 }

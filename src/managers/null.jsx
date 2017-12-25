@@ -11,8 +11,7 @@ class Manager {
     config(uuid) {}
 
     *processProject(uuid) {
-        let state = yield select();
-        let project = _.get(state, `app.local.projects.${uuid}`);
+        let project = yield select(_.get, `app.local.projects.${uuid}`);
 
         DEBUG(`Null manager processing project ${uuid} -- ${project.name}`);
     }
