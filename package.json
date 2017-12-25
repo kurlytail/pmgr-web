@@ -4,6 +4,7 @@
     "version": "99.99.99",
     "main": "dist/index.min.js",
     "dependencies": {
+        "debug": "^3.1.0",
         "history": "^4.7.2",
         "lodash": "^4.17.4",
         "markdown-to-jsx": "^6.3.1",
@@ -23,7 +24,6 @@
         "redux-logger": "^3.0.6",
         "redux-saga": "^0.16.0",
         "redux-thunk": "^2.2.0",
-        "tracer": "^0.8.11",
         "uuid": "^3.1.0"
     },
     "devDependencies": {

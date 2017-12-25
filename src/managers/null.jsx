@@ -5,17 +5,21 @@ import ProjectReducer from '../reducers/project';
 import { register } from './factory';
 import React from 'react';
 import avatar from './null.svg';
+var DEBUG = require('debug')('managers/null');
 
 class Manager {
+    config(uuid) {}
 
-    config(project) {}
+    *processProject(uuid) {
+        let state = yield select();
+        let project = _.get(state, `app.local.projects.${uuid}`);
 
-    *processProject(project) {}
+        DEBUG(`Null manager processing project ${uuid} -- ${project.name}`);
+    }
 
     avatar(dim = 100) {
         return <img src={avatar} height={dim} width={dim} />;
     }
-
 }
 
 register('null', Manager);
