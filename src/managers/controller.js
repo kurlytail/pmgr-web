@@ -1,6 +1,6 @@
 import ProjectReducer from '../reducers/project';
 import DocumentReducer from '../reducers/document';
-import { call, select, takeEvery, fork, all, put } from 'redux-saga/effects';
+import { select, takeEvery, fork, all, put, call } from 'redux-saga/effects';
 import { newManager } from './factory.js';
 import { runSaga } from '../store';
 import _ from 'lodash';
@@ -9,7 +9,6 @@ var DEBUG = require('debug')('managers/controller');
 
 function* processProject(action) {
     let uuid = action.payload.uuid;
-    DEBUG(`Processing project ${uuid}`);
 
     let project = yield select(_.get, `app.local.projects.${uuid}`);
     let manager;
@@ -19,7 +18,9 @@ function* processProject(action) {
     }
 
     if (manager) {
-        yield call(manager.processProject, uuid);
+        yield call([manager, manager.processProject], uuid);
+    } else {
+        DEBUG('Manager ${project.manager} not found');
     }
 }
 

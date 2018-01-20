@@ -4,7 +4,7 @@ import InlineEdit from 'react-edit-inline';
 import _ from 'lodash';
 import ProjectListReducer from '../reducers/project';
 import uuid from 'uuid/v4';
-import { getAllManagers, newManager } from '../managers';
+import { getAllManagers, newManager as getManager} from '../managers';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
@@ -13,6 +13,8 @@ class Project extends Component {
         var managerOptions = _.map(getAllManagers(), value => {
             return { value: value, label: _.startCase(value) };
         });
+        /* Retrieve the manager for this project */
+        var manager = getManager(this.props.project.manager, this.props.match.params.uuid);
         return (
             <div className="panel panel-default">
                 <div className="panel-heading">
@@ -30,7 +32,7 @@ class Project extends Component {
                             <h3>{this.props.match.params.uuid}</h3>
                         </div>
                         <div className="col col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                            <div className="pull-right">{newManager(this.props.project.manager).avatar()}</div>
+                            <div className="pull-right">{manager.avatar()}</div>
                             <h3>
                                 <Select
                                     name="manager"
@@ -73,6 +75,58 @@ class Project extends Component {
                         </tbody>
                     </table>
                 </div>
+                <div>{manager.config(this.props.project)}</div>
+                <div>
+                    <div className="panel panel-default">
+                        <div className="panel-heading">
+                            <h4 className="panel-title">
+                                <a data-toggle="collapse" href="#processing">
+                                    Documents being processed
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="processing" className="panel-collapse">
+                            <div className="panel-body">
+                                <ul className="list-group">
+                                    {_.map(_.pickBy(this.props.documents, doc => doc.complete !== 100), (doc, key) => (
+                                        <li className="list-group-item" key={key}>{doc.name}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="panel panel-default">
+                        <div className="panel-heading">
+                            <h4 className="panel-title">
+                                <a data-toggle="collapse" href="#completed">
+                                    Completed documents
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="completed" className="panel-collapse collapse">
+                            <div className="panel-body">
+                                <ul className="list-group">
+                                    {_.map(_.pickBy(this.props.documents, doc => doc.complete === 100), (doc, key) => (
+                                        <li className="list-group-item" key={key}>{doc.name}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="panel panel-default">
+                        <div className="panel-heading">
+                            <h4 className="panel-title">
+                                <a data-toggle="collapse" href="#waiting">
+                                    Documents to be started
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="waiting" className="panel-collapse collapse">
+                            <div className="panel-body">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -80,7 +134,8 @@ class Project extends Component {
 
 const mapProps = (state, props) => {
     return {
-        project: state.app.local.projects[props.match.params.uuid]
+        project: state.app.local.projects[props.match.params.uuid],
+        documents: state.app.local.documents[props.match.params.uuid]
     };
 };
 

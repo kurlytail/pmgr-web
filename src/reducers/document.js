@@ -31,19 +31,19 @@ function createDocumentReducer() {
     let reducer = handleActions(
         {
             [documentCreate]: (state, { payload: { uuid, name } }) => {
-                let newDocument = { deleted: false, name: 'Document Name' };
+                let newDocument = { deleted: false, name: _.startCase(name) };
                 let documents = Object.assign({}, state[uuid], { [name]: newDocument });
                 return Object.assign({}, state, {
                     [uuid]: documents
                 });
             },
             [documentConfigure]: (state, { payload: { uuid, name, data } }) => {
-                let newDocument = Object.assign({}, (state[uuid][name]: { deleted: false, ...data }));
+                let newDocument = Object.assign({}, state[uuid][name], { deleted: false, ...data });
                 let documents = Object.assign({}, state[uuid], { [name]: newDocument });
                 return Object.assign({}, state, { [uuid]: documents });
             },
             [documentDelete]: (state, { payload: { uuid, name } }) => {
-                let newDocument = Object.assign({}, (state[uuid][name]: { deleted: true }));
+                let newDocument = Object.assign({}, state[uuid][name], { deleted: true });
                 let documents = Object.assign({}, state[uuid], { [name]: newDocument });
                 return Object.assign({}, state, { [uuid]: documents });
             },

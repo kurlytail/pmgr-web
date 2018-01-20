@@ -2,7 +2,7 @@
 import {register} from './factory';
 
 class Manual {
-    config() {
+    config(projectUuid, activityName) {
 
     }
 }
