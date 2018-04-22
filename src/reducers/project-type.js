@@ -1,7 +1,9 @@
 import _ from 'lodash';
-import { injectReducer, StoreInfo } from '../store';
+import { injectReducer } from '../store';
 import { createActions, handleActions } from 'redux-actions';
 import Elaborate from '../elaborate';
+
+const STATE_PATH = 'app.local.projectTypes';
 
 function createprojectTypeReducer() {
     let actionNames = {
@@ -32,9 +34,6 @@ function createprojectTypeReducer() {
     const projectTypeSetActivity = actions[_.camelCase(actionNames.projectTypeSetActivityAction)];
     const projectTypeConfigure = actions[_.camelCase(actionNames.projectTypeConfigureAction)];
     const projectTypeGarbageCollect = actions[_.camelCase(actionNames.projectTypeGarbageCollectAction)];
-
-    let defaultState = _.get(StoreInfo.store.getState(), 'app.local.projectTypes');
-    defaultState = defaultState ? defaultState : {};
 
     let reducer = handleActions(
         {
@@ -81,10 +80,10 @@ function createprojectTypeReducer() {
                 return newState;
             }
         },
-        defaultState
+        _.get(localStorage.getItem('pmgr'), STATE_PATH) || {}
     );
 
-    injectReducer('app.local.projectTypes', reducer);
+    injectReducer(STATE_PATH, reducer);
     Object.assign(reducer, actions, actionNames);
 
     return reducer;

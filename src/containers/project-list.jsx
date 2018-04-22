@@ -5,16 +5,16 @@ import _ from 'lodash';
 import ProjectListReducer from '../reducers/project';
 import DocumentReducer from '../reducers/project';
 import uuid from 'uuid/v4';
-import { getAllManagers, newManager } from '../managers';
+import Factory from '../managers';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
 class ProjectList extends Component {
     render() {
-        var managerOptions = _.map(getAllManagers(), value => {
+        const managerOptions = _.map(Factory.getAllManagers(), value => {
             return { value: value, label: _.startCase(value) };
         });
-        var projectTypeOptions = _.map(this.props.types, (value, key) => {
+        const projectTypeOptions = _.map(this.props.types, (value, key) => {
             return { value: key, label: value.name };
         });
         return (
@@ -30,11 +30,12 @@ class ProjectList extends Component {
                                 <th>Type</th>
                                 <th>Summary</th>
                                 <th>
-                                    <div className="btn-group">
-                                        <a onClick={this.props.create} style={{ paddingLeft: '30px' }}>
-                                            <i className="fa fa-plus" />
-                                        </a>
-                                    </div>
+                                    <button className="btn" onClick={this.props.create}>
+                                        <i className="fa fa-plus" />
+                                    </button>
+                                    <button className="btn" onClick={this.props.gc}>
+                                        <i className="fa fa-trash" />
+                                    </button>
                                 </th>
                             </tr>
                         </thead>
@@ -62,7 +63,7 @@ class ProjectList extends Component {
                                             onChange={newValue => this.props.configure(uuid, { manager: newValue })}
                                         />
                                     </td>
-                                    <td>{newManager(this.props.projects[uuid].manager).avatar(40)}</td>
+                                    <td>{Factory.newManager(this.props.projects[uuid].manager).avatar(40)}</td>
                                     <td>
                                         <Select
                                             name="type"
@@ -112,6 +113,9 @@ const mapDispatch = dispatch => {
     return {
         create: () => {
             dispatch(ProjectListReducer.projectCreate(uuid()));
+        },
+        gc: () => {
+            dispatch(ProjectTypeListReducer.projectTypeGarbageCollect());
         },
         del: uuid => {
             dispatch(ProjectListReducer.projectDelete(uuid));

@@ -1,9 +1,11 @@
 import _ from 'lodash';
-import { injectReducer, StoreInfo } from '../store';
+import { injectReducer } from '../store';
 import { createActions, handleActions } from 'redux-actions';
 
+const STATE_PATH = 'app.local.activities';
+
 function createActivityReducer() {
-    let actionNames = {
+    const actionNames = {
         activityCreateAction: 'ACTIVITY_CREATE',
         activityDeleteAction: 'ACTIVITY_DELETE',
         activityProjectDeleteAction: 'ACTIVITY_PROJECT_DELETE',
@@ -24,9 +26,6 @@ function createActivityReducer() {
     const activityDelete = actions[_.camelCase(actionNames.activityDeleteAction)];
     const activityGarbageCollect = actions[_.camelCase(actionNames.activityGarbageCollectAction)];
     const activityProjectDelete = actions[_.camelCase(actionNames.activityProjectDeleteAction)];
-
-    let defaultState = _.get(StoreInfo.store.getState(), 'app.local.activities');
-    defaultState = defaultState ? defaultState : {};
 
     let reducer = handleActions(
         {
@@ -62,15 +61,15 @@ function createActivityReducer() {
                 return newState;
             }
         },
-        defaultState
+        _.get(localStorage.getItem('pmgr'), STATE_PATH) || {}
     );
 
-    injectReducer('app.local.activities', reducer);
+    injectReducer(STATE_PATH, reducer);
     Object.assign(reducer, actions, actionNames);
 
     return reducer;
 }
 
-let _reducer = createActivityReducer();
+const _reducer = createActivityReducer();
 
 export default _reducer;

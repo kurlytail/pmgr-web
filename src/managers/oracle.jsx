@@ -1,5 +1,5 @@
 import { select } from 'redux-saga/effects';
-import { register } from './factory';
+import Factory from './factory';
 import React from 'react';
 import avatar from './oracle.svg';
 var DEBUG = require('debug')('managers/oracle');
@@ -24,4 +24,4 @@ class Manager {
     }
 }
 
-register('oracle', Manager);
+Factory.register('oracle', Manager);

@@ -3,10 +3,10 @@ import Elaborate from '../elaborate';
 import _ from 'lodash';
 import ProjectReducer from '../reducers/project';
 import DocumentReducer from '../reducers/document';
-import { register } from './factory';
+import Factory from './factory';
 import React from 'react';
 import avatar from './null.svg';
-var DEBUG = require('debug')('managers/null');
+const DEBUG = require('debug')('managers/null');
 
 class Manager {
     config(uuid) {
@@ -17,10 +17,7 @@ class Manager {
         let allDocuments = yield select(_.get, `app.local.documents.${uuid}`);
 
         /* Get documents that are not generated, or have been marked complete */
-        var documents = _.pickBy(allDocuments, value => {
-            if (value.complete === 100) return true;
-            return false;
-        });
+        let documents = _.pickBy(allDocuments, doc => doc.complete === 100);
 
         /* Create documents with no inputs and if they are not already part of the documents list */
         let inputDocs = _.filter(
@@ -29,36 +26,25 @@ class Manager {
         );
 
         /* Create input documents */
-        for (var i in inputDocs) {
-            let doc = inputDocs[i];
-
-            yield put(DocumentReducer.documentCreate(uuid, doc.name));
-            yield put(DocumentReducer.documentConfigure(uuid, doc.name, { complete: 100 }));
-        }
+        yield all(inputDocs.map(doc => put(DocumentReducer.documentCreate(uuid, doc.name))));
+        yield all(inputDocs.map(doc => put(DocumentReducer.documentConfigure(uuid, doc.name, { complete: 100 }))));
 
         allDocuments = yield select(_.get, `app.local.documents.${uuid}`);
 
         /* Get documents that are not generated, or have been marked complete */
-        documents = _.pickBy(allDocuments, value => {
-            if (value.complete === 100) return true;
-            return false;
-        });
+        documents = _.pickBy(allDocuments, doc => doc.complete === 100);
 
         /* Find activities that can make progress */
         let completedDocuments = _.keys(documents);
-        var activities = [];
+        const activities = [];
 
         _.forEach(Elaborate.Activities, activity => {
-            DEBUG(activity);
             let inputDocuments = _.map(activity.input, 'from');
-            DEBUG(inputDocuments);
             inputDocuments = _.map(_.filter(inputDocuments, doc => doc.name.indexOf('tool_') !== 0), 'name');
-            if(_.intersection(inputDocuments, completedDocuments).length === inputDocuments.length) {
+            if (_.intersection(inputDocuments, completedDocuments).length === inputDocuments.length) {
                 activities.push(activity);
             }
         });
-
-        DEBUG(activities);
 
         return documents;
     }
@@ -80,4 +66,4 @@ class Manager {
     }
 }
 
-register('null', Manager);
+Factory.register('null', Manager);

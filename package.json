@@ -24,6 +24,8 @@
         "redux-logger": "^3.0.6",
         "redux-saga": "^0.16.0",
         "redux-thunk": "^2.2.0",
+        "semantic-ui-less": "^2.2.14",
+        "semantic-ui-react": "^0.78.2",
         "uuid": "^3.1.0"
     },
     "devDependencies": {
@@ -69,7 +71,7 @@
     "scripts": {
         "docs": "jsdoc -c jsdoc.json && npx opn-cli ./docs/index.html",
         "build:dll": "npm run build -- --config ./webpack_dll.config.js",
-        "build": "NODE_ENV=\"debug\" webpack --display-modules --display-reasons --watch",
+        "build": "NODE_ENV=\"debug\" webpack --display-modules --display-reasons",
         "start": "webpack-dev-server",
         "lint": "eslint src",
         "test": "jest tests",

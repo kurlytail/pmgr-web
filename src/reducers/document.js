@@ -1,6 +1,8 @@
 import _ from 'lodash';
-import { injectReducer, StoreInfo } from '../store';
+import { injectReducer } from '../store';
 import { createActions, handleActions } from 'redux-actions';
+
+const STATE_PATH = 'app.local.documents';
 
 function createDocumentReducer() {
     let actionNames = {
@@ -24,9 +26,6 @@ function createDocumentReducer() {
     const documentDelete = actions[_.camelCase(actionNames.documentDeleteAction)];
     const documentGarbageCollect = actions[_.camelCase(actionNames.documentGarbageCollectAction)];
     const documentProjectDelete = actions[_.camelCase(actionNames.documentProjectDeleteAction)];
-
-    let defaultState = _.get(StoreInfo.store.getState(), 'app.local.documents');
-    defaultState = defaultState ? defaultState : {};
 
     let reducer = handleActions(
         {
@@ -62,10 +61,10 @@ function createDocumentReducer() {
                 return newState;
             }
         },
-        defaultState
+        _.get(localStorage.getItem('pmgr'), STATE_PATH) || {}
     );
 
-    injectReducer('app.local.documents', reducer);
+    injectReducer(STATE_PATH, reducer);
     Object.assign(reducer, actions, actionNames);
 
     return reducer;

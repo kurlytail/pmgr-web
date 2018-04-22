@@ -45,38 +45,40 @@ class MainContainer extends Component {
         return (
             <div className="container-fluid">
                 <nav className="navbar navbar-default">
-                    <ul className="nav navbar-nav">
-                        <li>
-                            <a onClick={StoreInfo.history.goBack}>
-                                <i className="fa fa-arrow-left" />
-                            </a>
-                        </li>
-                    </ul>
-                    <ul className="nav navbar-nav" style={{ paddingLeft: '30px' }}>
-                        <li className="active">
-                            <a href="#/">Projects</a>
-                        </li>
-                        <li>
-                            <a href="#/project-type">Project Types</a>
-                        </li>
-                    </ul>
-                    <ul className="nav navbar-nav pull-right">
-                        <li style={{ paddingLeft: '30px' }}>
-                            <a onClick={this.saveConfiguration}>
-                                <i className="fa fa-floppy-o" />
-                            </a>
-                        </li>
-                        <li style={{ paddingLeft: '30px', paddingRight: '30px' }}>
-                            <ReactFileReader
-                                fileTypes={['.json']}
-                                base64={true}
-                                multipleFiles={false}
-                                handleFiles={this.handleConfigUpload}
-                            >
-                                <i className="fa fa-folder-open" />
-                            </ReactFileReader>
-                        </li>
-                    </ul>
+                    <div className="navbar-collapse collapse" id="navbarNavDropdown">
+                        <ul className="nav navbar-nav navbar-left">
+                            <li className="nav-item" name="back" onClick={StoreInfo.history.goBack} />
+                            <li className="nav-item">
+                                <a className="nav-link" href="#/">
+                                    Projects
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#/project-type">
+                                    Project Types
+                                </a>
+                            </li>
+                        </ul>
+                        <ul className="nav navbar-nav navbar-right">
+                            <li className="nav-item">
+                                <a className="nav-link" onClick={this.saveConfiguration}>
+                                    <i className="fa fa-floppy-o" />
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link">
+                                    <ReactFileReader
+                                        fileTypes={['.json']}
+                                        base64={true}
+                                        multipleFiles={false}
+                                        handleFiles={this.handleConfigUpload}
+                                    >
+                                        <i className="fa fa-folder-open" />
+                                    </ReactFileReader>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </nav>
                 <main>
                     <Route path="/" exact component={ProjectList} />

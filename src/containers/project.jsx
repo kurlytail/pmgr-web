@@ -4,17 +4,17 @@ import InlineEdit from 'react-edit-inline';
 import _ from 'lodash';
 import ProjectListReducer from '../reducers/project';
 import uuid from 'uuid/v4';
-import { getAllManagers, newManager as getManager} from '../managers';
+import Factory from '../managers';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
 class Project extends Component {
     render() {
-        var managerOptions = _.map(getAllManagers(), value => {
+        const managerOptions = _.map(Factory.getAllManagers(), value => {
             return { value: value, label: _.startCase(value) };
         });
         /* Retrieve the manager for this project */
-        var manager = getManager(this.props.project.manager, this.props.match.params.uuid);
+        const manager = Factory.newManager(this.props.project.manager, this.props.match.params.uuid);
         return (
             <div className="panel panel-default">
                 <div className="panel-heading">
@@ -89,7 +89,9 @@ class Project extends Component {
                             <div className="panel-body">
                                 <ul className="list-group">
                                     {_.map(_.pickBy(this.props.documents, doc => doc.complete !== 100), (doc, key) => (
-                                        <li className="list-group-item" key={key}>{doc.name}</li>
+                                        <li className="list-group-item" key={key}>
+                                            {doc.name}
+                                        </li>
                                     ))}
                                 </ul>
                             </div>
@@ -107,7 +109,9 @@ class Project extends Component {
                             <div className="panel-body">
                                 <ul className="list-group">
                                     {_.map(_.pickBy(this.props.documents, doc => doc.complete === 100), (doc, key) => (
-                                        <li className="list-group-item" key={key}>{doc.name}</li>
+                                        <li className="list-group-item" key={key}>
+                                            {doc.name}
+                                        </li>
                                     ))}
                                 </ul>
                             </div>
@@ -122,8 +126,7 @@ class Project extends Component {
                             </h4>
                         </div>
                         <div id="waiting" className="panel-collapse collapse">
-                            <div className="panel-body">
-                            </div>
+                            <div className="panel-body" />
                         </div>
                     </div>
                 </div>

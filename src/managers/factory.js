@@ -1,19 +1,23 @@
 import _ from 'lodash';
 
-var factory = {};
-function register(name, managerClass) {
-    factory[name] = managerClass;
-}
-
-function newManager(name) {
-    if (!factory[name]) {
-        return null;
+class Factory {
+    constructor() {
+        this.factory = {};
     }
-    return new factory[name]();
+    register(name, managerClass) {
+        this.factory[name] = managerClass;
+    }
+
+    newManager(name) {
+        if (!this.factory[name]) {
+            return null;
+        }
+        return new this.factory[name]();
+    }
+
+    getAllManagers() {
+        return _.keys(this.factory);
+    }
 }
 
-function getAllManagers() {
-    return _.keys(factory);
-}
-
-export { register, newManager, getAllManagers };
+export default new Factory();

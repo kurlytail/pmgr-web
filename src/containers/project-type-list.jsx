@@ -17,14 +17,12 @@ class ProjectTypeList extends Component {
                                 <th>ID</th>
                                 <th>Summary</th>
                                 <th>
-                                    <div className="btn-group">
-                                        <button className="btn btn-primary" onClick={this.props.create}>
-                                            <i className="fa fa-plus" style={{ fontSize: '24px' }} />
-                                        </button>
-                                        <button className="btn" onClick={this.props.gc}>
-                                            <i className="fa fa-trash" style={{ fontSize: '24px' }} />
-                                        </button>
-                                    </div>
+                                    <button className="btn" onClick={this.props.create}>
+                                        <i className="fa fa-plus" />
+                                    </button>
+                                    <button className="btn" onClick={this.props.gc}>
+                                        <i className="fa fa-trash" />
+                                    </button>
                                 </th>
                             </tr>
                         </thead>
@@ -55,7 +53,7 @@ class ProjectTypeList extends Component {
                                     </td>
                                     <td>
                                         <button className="btn" onClick={() => this.props.del(uuid)}>
-                                            <i className="fa fa-trash" style={{ fontSize: '24px' }} />
+                                            <i className="fa fa-trash" />
                                         </button>
                                     </td>
                                 </tr>

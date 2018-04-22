@@ -11,10 +11,10 @@ import 'react-select/dist/react-select.css';
 
 class ProjectType extends Component {
     render() {
-        var activityOptions = _.map(getAllActivities(), value => {
+        const activityOptions = _.map(getAllActivities(), value => {
             return { value: value, label: _.startCase(value) };
         });
-        var toolOptions = _.map(getAllTools(), value => {
+        const toolOptions = _.map(getAllTools(), value => {
             return { value: value, label: _.startCase(value) };
         });
         return (
@@ -102,7 +102,7 @@ class ProjectType extends Component {
                                             <th>Tool Type</th>
                                         </tr>
                                     </thead>
-                                       <tbody>
+                                    <tbody>
                                         {_.map(this.props.projectType.tools, (type, name) => {
                                             var displayName = name.replace(/^tool/, '');
                                             return (
@@ -116,16 +116,14 @@ class ProjectType extends Component {
                                                             value={type}
                                                             simpleValue
                                                             searchable={false}
-                                                            onChange={newValue =>
-                                                                this.props.setTool(name, newValue)
-                                                            }
+                                                            onChange={newValue => this.props.setTool(name, newValue)}
                                                         />
                                                     </td>
                                                 </tr>
                                             );
                                         })}
                                     </tbody>
-                             </table>
+                                </table>
                             </div>
                         </div>
                     </div>
