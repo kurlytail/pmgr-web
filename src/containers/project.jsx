@@ -7,6 +7,7 @@ import uuid from 'uuid/v4';
 import Factory from '../managers';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import DocumentListItem from './document-list-item.jsx';
 
 class Project extends Component {
     render() {
@@ -16,20 +17,33 @@ class Project extends Component {
         /* Retrieve the manager for this project */
         const manager = Factory.newManager(this.props.project.manager, this.props.match.params.uuid);
         return (
-            <div className="panel panel-default">
-                <div className="panel-heading">
+            <div className="card">
+                <div className="card-header">
                     <div className="row">
                         <div className="col col-xs-10 col-sm-10 col-md-10 col-lg-10">
-                            <h1 className="panel-title">
+                            <h6 className="text-muted">Project</h6>
+                            <h1 className="card-title">
                                 <InlineEdit
                                     text={this.props.project.name}
                                     paramName="name"
                                     change={data => this.props.configure(data)}
                                     className="h1"
                                     activeClassName="h1"
+                                    style={{
+                                        width: '100%'
+                                    }}
                                 />
                             </h1>
                             <h3>{this.props.match.params.uuid}</h3>
+                            <InlineEdit
+                                placeholder="Add summary"
+                                text={this.props.project.summary || ''}
+                                paramName="summary"
+                                change={data => this.props.configure(data)}
+                                style={{
+                                    width: '100%'
+                                }}
+                            />
                         </div>
                         <div className="col col-xs-2 col-sm-2 col-md-2 col-lg-2">
                             <div className="pull-right">{manager.avatar()}</div>
@@ -47,86 +61,70 @@ class Project extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="panel-body">
-                    <table className="table">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <InlineEdit
-                                        placeholder="Add summary"
-                                        text={this.props.project.summary ? this.props.project.summary : ''}
-                                        paramName="summary"
-                                        change={data => this.props.configure(data)}
-                                    />
-                                </td>
-                            </tr>
-                            <tr />
-                            <tr>
-                                <td>
-                                    <InlineEdit
-                                        placeholder="Add description"
-                                        text={this.props.project.description ? this.props.project.description : ''}
-                                        paramName="description"
-                                        change={data => this.props.configure(data)}
-                                        editingElement="textarea"
-                                    />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div className="card-body">
+                    <InlineEdit
+                        placeholder="Add description"
+                        text={this.props.project.description || ''}
+                        paramName="description"
+                        change={data => this.props.configure(data)}
+                        editingElement="textarea"
+                        style={{
+                            width: '100%'
+                        }}
+                    />
                 </div>
                 <div>{manager.config(this.props.project)}</div>
-                <div>
-                    <div className="panel panel-default">
-                        <div className="panel-heading">
-                            <h4 className="panel-title">
-                                <a data-toggle="collapse" href="#processing">
-                                    Documents being processed
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="processing" className="panel-collapse">
-                            <div className="panel-body">
-                                <ul className="list-group">
-                                    {_.map(_.pickBy(this.props.documents, doc => doc.complete !== 100), (doc, key) => (
-                                        <li className="list-group-item" key={key}>
-                                            {doc.name}
-                                        </li>
-                                    ))}
-                                </ul>
+
+                <div className="row">
+                    <div className="col">
+                        <div className="card">
+                            <div className="card-header">
+                                <h4 className="card-title">Completed documents</h4>
                             </div>
+                            <ul className="list-group">
+                                {_.map(_.pickBy(this.props.documents, doc => doc.complete), (doc, key) => (
+                                    <DocumentListItem project={this.props.match.params.uuid} document={key} key={key} />
+                                ))}
+                            </ul>
                         </div>
                     </div>
-                    <div className="panel panel-default">
-                        <div className="panel-heading">
-                            <h4 className="panel-title">
-                                <a data-toggle="collapse" href="#completed">
-                                    Completed documents
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="completed" className="panel-collapse collapse">
-                            <div className="panel-body">
-                                <ul className="list-group">
-                                    {_.map(_.pickBy(this.props.documents, doc => doc.complete === 100), (doc, key) => (
-                                        <li className="list-group-item" key={key}>
-                                            {doc.name}
-                                        </li>
-                                    ))}
-                                </ul>
+                    <div className="col">
+                        <div className="card">
+                            <div className="card-header">
+                                <h4 className="card-title">Documents being processed</h4>
                             </div>
+
+                            <ul className="list-group">
+                                {_.map(
+                                    _.pickBy(this.props.documents, doc => !doc.complete && doc.started),
+                                    (doc, key) => (
+                                        <DocumentListItem
+                                            project={this.props.match.params.uuid}
+                                            document={key}
+                                            key={key}
+                                        />
+                                    )
+                                )}
+                            </ul>
                         </div>
                     </div>
-                    <div className="panel panel-default">
-                        <div className="panel-heading">
-                            <h4 className="panel-title">
-                                <a data-toggle="collapse" href="#waiting">
-                                    Documents to be started
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="waiting" className="panel-collapse collapse">
-                            <div className="panel-body" />
+                    <div className="col">
+                        <div className="card">
+                            <div className="card-header">
+                                <h4 className="card-title">Documents to be started</h4>
+                            </div>
+                            <ul className="list-group">
+                                {_.map(
+                                    _.pickBy(this.props.documents, doc => !doc.started && !doc.complete),
+                                    (doc, key) => (
+                                        <DocumentListItem
+                                            project={this.props.match.params.uuid}
+                                            document={key}
+                                            key={key}
+                                        />
+                                    )
+                                )}
+                            </ul>
                         </div>
                     </div>
                 </div>

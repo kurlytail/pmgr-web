@@ -3,6 +3,8 @@ import Project from './project.jsx';
 import ProjectList from './project-list.jsx';
 import ProjectType from './project-type.jsx';
 import ProjectTypeList from './project-type-list.jsx';
+import Dashboard from './dashboard.jsx';
+import Document from './document.jsx';
 import { Route } from 'react-router-dom';
 import FileDownload from 'react-file-download';
 import ReactFileReader from 'react-file-reader';
@@ -32,7 +34,14 @@ class MainContainer extends Component {
         $(document).ready(function() {
             // -----------------------------------------------------------------------
             $.each($('nav').find('li'), function() {
-                $(this).toggleClass(
+                $(this).addClass(
+                    'active',
+                    window.location.hash ===
+                        $(this)
+                            .find('a')
+                            .attr('href')
+                );
+                $(this).removeClass(
                     'active',
                     window.location.hash ===
                         $(this)
@@ -45,46 +54,52 @@ class MainContainer extends Component {
         return (
             <div className="container-fluid">
                 <nav className="navbar navbar-default">
-                    <div className="navbar-collapse collapse" id="navbarNavDropdown">
-                        <ul className="nav navbar-nav navbar-left">
-                            <li className="nav-item" name="back" onClick={StoreInfo.history.goBack} />
-                            <li className="nav-item">
-                                <a className="nav-link" href="#/">
-                                    Projects
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#/project-type">
-                                    Project Types
-                                </a>
-                            </li>
-                        </ul>
-                        <ul className="nav navbar-nav navbar-right">
-                            <li className="nav-item">
-                                <a className="nav-link" onClick={this.saveConfiguration}>
-                                    <i className="fa fa-floppy-o" />
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link">
-                                    <ReactFileReader
-                                        fileTypes={['.json']}
-                                        base64={true}
-                                        multipleFiles={false}
-                                        handleFiles={this.handleConfigUpload}
-                                    >
-                                        <i className="fa fa-folder-open" />
-                                    </ReactFileReader>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul className="nav">
+                        <li className="nav-item" name="back" onClick={StoreInfo.history.goBack} />
+                        <li className="nav-item">
+                            <a className="nav-link" href="#/">
+                                Dashboard
+                            </a>
+                        </li>
+
+                        <li className="nav-item">
+                            <a className="nav-link" href="#/project">
+                                Projects
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#/project-type">
+                                Project Types
+                            </a>
+                        </li>
+                    </ul>
+                    <ul className="nav ml-auto">
+                        <li className="nav-item">
+                            <a className="nav-link" onClick={this.saveConfiguration}>
+                                <i className="fa fa-floppy-o" />
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link">
+                                <ReactFileReader
+                                    fileTypes={['.json']}
+                                    base64={true}
+                                    multipleFiles={false}
+                                    handleFiles={this.handleConfigUpload}
+                                >
+                                    <i className="fa fa-folder-open" />
+                                </ReactFileReader>
+                            </a>
+                        </li>
+                    </ul>
                 </nav>
                 <main>
-                    <Route path="/" exact component={ProjectList} />
+                    <Route path="/" exact component={Dashboard} />
+                    <Route path="/project" exact component={ProjectList} />
                     <Route path="/project/:uuid" component={Project} />
                     <Route path="/project-type" exact component={ProjectTypeList} />
                     <Route path="/project-type/:uuid" component={ProjectType} />
+                    <Route path="/document/:project/:document" component={Document} />
                 </main>
             </div>
         );

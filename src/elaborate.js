@@ -37,6 +37,32 @@ class Elaborate {
     get ProcessGroups() {
         return this.processGroups;
     }
+
+    getToolsModifyingDocument(documentName) {
+        const tools = this.Tools.reduce((tools, tool) => {
+            const activities = _.map(tool.output, 'to');
+            const documents = _.map(_.map(_.flatten(_.map(activities, 'output')), 'to'), 'name');
+            if (documents.includes(documentName)) {
+                return [tool.name, ...tools];
+            }
+            return tools;
+        }, []);
+
+        return tools;
+    }
+
+    getToolsUsingDocument(documentName) {
+        const tools = this.Tools.reduce((tools, tool) => {
+            const activities = _.map(tool.output, 'to');
+            const documents = _.map(_.map(_.flatten(_.map(activities, 'input')), 'from'), 'name');
+            if (documents.includes(documentName)) {
+                return [tool.name, ...tools];
+            }
+            return tools;
+        }, []);
+
+        return tools;
+    }
 }
 
 let _elaborate = new Elaborate();

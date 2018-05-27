@@ -1,26 +1,51 @@
 <!doctype html>
 <!-- <html lang="en" dir="ltr" class="uk-height-1-1 uk-notouch"> -->
-<html class='uk-height-1-1'>
+<html lang="en">
   <head>
-    <meta http-equiv='Content-type' content='text/html; charset=utf-8'/>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <!-- Produce favicon, etc -->
-    <!-- Allow for Intl support -->
-    <!-- <link rel='shortcut icon' href='favicon.ico' type='image/x-icon'> -->
-    <!-- <link rel='apple-touch-icon-precomposed' href='images/apple-touch-icon.png'> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- BEGIN BASE STYLES -->
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <!-- END BASE STYLES -->
 
-<!-- Latest compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
+    <!-- BEGIN PLUGINS STYLES -->
+    <!-- plugins styles goes here -->
+    <!-- END PLUGINS STYLES -->
+
+    <!-- BEGIN THEME STYLES -->
+    <link rel="stylesheet" href="assets/stylesheets/main.min.css">
+    <link rel="stylesheet" href="assets/stylesheets/custom.css">
+    <!-- END THEME STYLES -->
+
+    <!-- BEGIN PAGE LEVEL STYLES -->
+    <!-- your styles for specific page goes here -->
+    <!-- END PAGE LEVEL STYLES -->
   </head>
+
+
   <body>
     <div class="container-fluid" id="root"/>
+
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- BEGIN BASE JS -->
+    <script src="assets/vendor/jquery/jquery.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/popper.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!-- END BASE JS -->
+
+    <!-- BEGIN PLUGINS JS -->
+    <script src="assets/vendor/stacked-menu/stacked-menu.min.js"></script>
+    <!-- END PLUGINS JS -->
+
+    <!-- BEGIN THEME JS -->
+    <script src="assets/javascript/main.min.js"></script>
+    <!-- END THEME JS -->
+
+    <!-- BEGIN PAGE LEVEL JS -->
+    <!-- your js for specific page goes here -->
+    <!-- END PAGE LEVEL JS -->
   </body>
 </html>

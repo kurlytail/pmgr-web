@@ -18,86 +18,78 @@ class ProjectList extends Component {
             return { value: key, label: value.name };
         });
         return (
-            <div className="card">
-                <div className="card-block">
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Project Name</th>
-                                <th>ID</th>
-                                <th>Manager</th>
-                                <th />
-                                <th>Type</th>
-                                <th>Summary</th>
-                                <th>
-                                    <button className="btn" onClick={this.props.create}>
-                                        <i className="fa fa-plus" />
-                                    </button>
-                                    <button className="btn" onClick={this.props.gc}>
-                                        <i className="fa fa-trash" />
-                                    </button>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {_.map(_.omitBy(this.props.projects, project => project.deleted), (meta, uuid) => (
-                                <tr key={uuid} scope="row">
-                                    <td>
-                                        <InlineEdit
-                                            text={this.props.projects[uuid].name}
-                                            paramName="name"
-                                            change={data => this.props.configure(uuid, data)}
-                                        />
-                                    </td>
-                                    <td>
-                                        <a href={'/#/project/' + uuid}>{uuid}</a>
-                                    </td>
-                                    <td>
-                                        <Select
-                                            name="manager"
-                                            options={managerOptions}
-                                            clearable={false}
-                                            value={this.props.projects[uuid].manager}
-                                            simpleValue
-                                            searchable={false}
-                                            onChange={newValue => this.props.configure(uuid, { manager: newValue })}
-                                        />
-                                    </td>
-                                    <td>{Factory.newManager(this.props.projects[uuid].manager).avatar(40)}</td>
-                                    <td>
-                                        <Select
-                                            name="type"
-                                            options={projectTypeOptions}
-                                            clearable={false}
-                                            value={this.props.projects[uuid].type}
-                                            simpleValue
-                                            searchable={false}
-                                            onChange={newValue => this.props.configure(uuid, { type: newValue })}
-                                        />
-                                    </td>
-                                    <td>
-                                        <InlineEdit
-                                            placeholder="Add summary"
-                                            text={
-                                                this.props.projects[uuid].summary
-                                                    ? this.props.projects[uuid].summary
-                                                    : ''
-                                            }
-                                            paramName="summary"
-                                            change={data => this.props.configure(uuid, data)}
-                                        />
-                                    </td>
-                                    <td>
-                                        <a onClick={() => this.props.del(uuid)}>
-                                            <i className="fa fa-trash" />
-                                        </a>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <table className="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>ID</th>
+                        <th>Manager</th>
+                        <th />
+                        <th>Type</th>
+                        <th>Summary</th>
+                        <th>
+                            <button className="btn" onClick={this.props.create}>
+                                <i className="fa fa-plus" />
+                            </button>
+                            <button className="btn" onClick={this.props.gc}>
+                                <i className="fa fa-trash" />
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {_.map(_.omitBy(this.props.projects, project => project.deleted), (meta, uuid) => (
+                        <tr key={uuid} scope="row">
+                            <td>
+                                <InlineEdit
+                                    text={this.props.projects[uuid].name}
+                                    paramName="name"
+                                    change={data => this.props.configure(uuid, data)}
+                                />
+                            </td>
+                            <td>
+                                <a href={'/#/project/' + uuid}>{uuid}</a>
+                            </td>
+                            <td>
+                                <Select
+                                    name="manager"
+                                    options={managerOptions}
+                                    clearable={false}
+                                    value={this.props.projects[uuid].manager}
+                                    simpleValue
+                                    searchable={false}
+                                    onChange={newValue => this.props.configure(uuid, { manager: newValue })}
+                                />
+                            </td>
+                            <td>{Factory.newManager(this.props.projects[uuid].manager).avatar(40)}</td>
+                            <td>
+                                <Select
+                                    name="type"
+                                    options={projectTypeOptions}
+                                    clearable={false}
+                                    value={this.props.projects[uuid].type}
+                                    simpleValue
+                                    searchable={false}
+                                    onChange={newValue => this.props.configure(uuid, { type: newValue })}
+                                />
+                            </td>
+                            <td>
+                                <InlineEdit
+                                    placeholder="Add summary"
+                                    text={this.props.projects[uuid].summary ? this.props.projects[uuid].summary : ''}
+                                    paramName="summary"
+                                    change={data => this.props.configure(uuid, data)}
+                                />
+                            </td>
+                            <td>
+                                <a onClick={() => this.props.del(uuid)}>
+                                    <i className="fa fa-trash" />
+                                </a>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         );
     }
 }
@@ -115,7 +107,7 @@ const mapDispatch = dispatch => {
             dispatch(ProjectListReducer.projectCreate(uuid()));
         },
         gc: () => {
-            dispatch(ProjectTypeListReducer.projectTypeGarbageCollect());
+            dispatch(ProjectListReducer.projectGarbageCollect());
         },
         del: uuid => {
             dispatch(ProjectListReducer.projectDelete(uuid));

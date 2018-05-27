@@ -1,8 +1,10 @@
 import _ from 'lodash';
 import { injectReducer } from '../store';
 import { createActions, handleActions } from 'redux-actions';
+import generateName from 'project-name-generator';
 
 const STATE_PATH = 'app.local.projects';
+const NULL_UUID = '00000000-0000-0000-0000-000000000000';
 
 function createProjectReducer() {
     let actionNames = {
@@ -28,7 +30,7 @@ function createProjectReducer() {
         {
             [projectCreate]: (state, { payload: { uuid } }) => {
                 return Object.assign({}, state, {
-                    [uuid]: { deleted: false, name: 'Project Name', manager: 'oracle' }
+                    [uuid]: { deleted: false, name: generateName().dashed, manager: 'null', type: NULL_UUID }
                 });
             },
             [projectConfigure]: (state, { payload: { uuid, data } }) => {

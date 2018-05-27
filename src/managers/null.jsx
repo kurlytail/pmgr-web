@@ -13,26 +13,13 @@ class Manager {
         return <div />;
     }
 
-    *getCompletedDocuments(uuid) {
+    *processActivities(uuid) {
+        DEBUG(`processing activities for ${uuid}`);
+
         let allDocuments = yield select(_.get, `app.local.documents.${uuid}`);
 
         /* Get documents that are not generated, or have been marked complete */
         let documents = _.pickBy(allDocuments, doc => doc.complete === 100);
-
-        /* Create documents with no inputs and if they are not already part of the documents list */
-        let inputDocs = _.filter(
-            Elaborate.Documents,
-            doc => (!doc.input || doc.input.length === 0) && !documents[doc.name]
-        );
-
-        /* Create input documents */
-        yield all(inputDocs.map(doc => put(DocumentReducer.documentCreate(uuid, doc.name))));
-        yield all(inputDocs.map(doc => put(DocumentReducer.documentConfigure(uuid, doc.name, { complete: 100 }))));
-
-        allDocuments = yield select(_.get, `app.local.documents.${uuid}`);
-
-        /* Get documents that are not generated, or have been marked complete */
-        documents = _.pickBy(allDocuments, doc => doc.complete === 100);
 
         /* Find activities that can make progress */
         let completedDocuments = _.keys(documents);
@@ -46,7 +33,30 @@ class Manager {
             }
         });
 
-        return documents;
+        return activities;
+    }
+
+    *processDocuments(uuid) {
+        DEBUG(`processing documents for ${uuid}`);
+        let allDocuments = yield select(_.get, `app.local.documents.${uuid}`);
+        allDocuments = allDocuments || {};
+
+        DEBUG(Elaborate.Tools);
+        DEBUG(Elaborate.Activities);
+        DEBUG(Elaborate.Documents);
+
+        let inputDocs = Elaborate.Documents.filter(
+            doc => (!doc.input || doc.input.length === 0) && !allDocuments[doc.name]
+        );
+
+        let allDocs = Elaborate.Documents.filter(doc => !allDocuments[doc.name]);
+
+        yield all(allDocs.map(doc => put(DocumentReducer.documentCreate(uuid, doc.name))));
+        yield all(
+            inputDocs.map(doc =>
+                put(DocumentReducer.documentConfigure(uuid, doc.name, { started: true, complete: false, progress: 0 }))
+            )
+        );
     }
 
     *processProject(uuid) {
@@ -56,9 +66,8 @@ class Manager {
 
         /* Get the project type */
         let type = yield select(_.get, `app.local.projectTypes.${project.type}`);
-        let documents = yield call([this, this.getCompletedDocuments], uuid);
-
-        /* Get all possible activities to run */
+        let documents = yield call([this, this.processDocuments], uuid);
+        //let activities = yield call([this, this.processActivities], uuid);
     }
 
     avatar(dim = 100) {
@@ -66,4 +75,4 @@ class Manager {
     }
 }
 
-Factory.register('null', Manager);
+export default Manager;

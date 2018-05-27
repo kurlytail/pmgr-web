@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import InlineEdit from 'react-edit-inline';
 import _ from 'lodash';
 import ProjectTypeListReducer from '../reducers/project-type';
-import uuid from 'uuid/v4';
 
 class ProjectTypeList extends Component {
     render() {
@@ -75,7 +74,7 @@ const mapProps = state => {
 const mapDispatch = dispatch => {
     return {
         create: () => {
-            dispatch(ProjectTypeListReducer.projectTypeCreate(uuid()));
+            dispatch(ProjectTypeListReducer.projectTypeCreate());
         },
         del: uuid => {
             dispatch(ProjectTypeListReducer.projectTypeDelete(uuid));

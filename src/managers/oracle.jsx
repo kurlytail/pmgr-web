@@ -24,4 +24,5 @@ class Manager {
     }
 }
 
-Factory.register('oracle', Manager);
+export default Manager;
+

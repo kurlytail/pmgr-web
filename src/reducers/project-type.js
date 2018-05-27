@@ -2,8 +2,11 @@ import _ from 'lodash';
 import { injectReducer } from '../store';
 import { createActions, handleActions } from 'redux-actions';
 import Elaborate from '../elaborate';
+import generateName from 'project-name-generator';
+import uuid from 'uuid/v4';
 
 const STATE_PATH = 'app.local.projectTypes';
+const NULL_UUID = '00000000-0000-0000-0000-000000000000';
 
 function createprojectTypeReducer() {
     let actionNames = {
@@ -37,7 +40,7 @@ function createprojectTypeReducer() {
 
     let reducer = handleActions(
         {
-            [projectTypeCreate]: (state, { payload: { uuid } }) => {
+            [projectTypeCreate]: state => {
                 let activities = {};
                 _.forEach(Elaborate.Activities, activity => {
                     activities[activity.name] = 'ignore';
@@ -46,10 +49,14 @@ function createprojectTypeReducer() {
                 _.forEach(Elaborate.Tools, tool => {
                     tools[tool.name] = 'ignore';
                 });
-                let projectType = { deleted: false, name: 'Project Type Name', activities, tools };
+
+                let projectTypeName =
+                    Object.keys(state).length === 0 ? 'default-type' : `${generateName().dashed}-type`;
+                let projectTypeUUID = Object.keys(state).length === 0 ? NULL_UUID : uuid();
+                let projectType = { deleted: false, name: projectTypeName, activities, tools };
 
                 return Object.assign({}, state, {
-                    [uuid]: projectType
+                    [projectTypeUUID]: projectType
                 });
             },
             [projectTypeSetTool]: (state, { payload: { uuid, toolName, toolType } }) => {

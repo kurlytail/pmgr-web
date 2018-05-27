@@ -8,6 +8,8 @@
         "history": "^4.7.2",
         "lodash": "^4.17.4",
         "markdown-to-jsx": "^6.3.1",
+        "project-name-generator": "^2.1.5",
+        "rc-slider": "^8.6.1",
         "react": "15.4.0",
         "react-dom": "15.4.0",
         "react-file-download": "^0.3.5",
