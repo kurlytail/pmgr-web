@@ -3,6 +3,7 @@ import Elaborate from '../elaborate';
 import _ from 'lodash';
 import ProjectReducer from '../reducers/project';
 import DocumentReducer from '../reducers/document';
+import ToolReducer from '../reducers/tool';
 import Factory from './factory';
 import React from 'react';
 import avatar from './null.svg';
@@ -41,10 +42,6 @@ class Manager {
         let allDocuments = yield select(_.get, `app.local.documents.${uuid}`);
         allDocuments = allDocuments || {};
 
-        DEBUG(Elaborate.Tools);
-        DEBUG(Elaborate.Activities);
-        DEBUG(Elaborate.Documents);
-
         let inputDocs = Elaborate.Documents.filter(
             doc => (!doc.input || doc.input.length === 0) && !allDocuments[doc.name]
         );
@@ -59,14 +56,26 @@ class Manager {
         );
     }
 
+    *processTools(uuid) {
+        DEBUG(`processing tools for ${uuid}`);
+        let allTools = yield select(_.get, `app.local.tools.${uuid}`);
+        allTools = allTools || {};
+
+        let tools = Elaborate.Tools.filter(tool => !allTools[tool.name]);
+
+        yield all(tools.map(tool => put(ToolReducer.toolCreate(uuid, tool.name))));
+        yield all(tools.map(tool => put(ToolReducer.toolConfigure(uuid, tool.name, { progress: 0 }))));
+    }
+
     *processProject(uuid) {
         let project = yield select(_.get, `app.local.projects.${uuid}`);
 
         DEBUG(`Null manager processing project ${uuid} -- ${project.name}`);
 
         /* Get the project type */
-        let type = yield select(_.get, `app.local.projectTypes.${project.type}`);
-        let documents = yield call([this, this.processDocuments], uuid);
+        yield select(_.get, `app.local.projectTypes.${project.type}`);
+        yield call([this, this.processDocuments], uuid);
+        yield call([this, this.processTools], uuid);
         //let activities = yield call([this, this.processActivities], uuid);
     }
 

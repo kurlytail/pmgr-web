@@ -37,12 +37,12 @@ function createProcessReducer() {
                 });
             },
             [processConfigure]: (state, { payload: { uuid, name, data } }) => {
-                let newProcess = Object.assign({}, (state[uuid][name]: { deleted: false, ...data }));
+                let newProcess = Object.assign({}, state[uuid][name], { deleted: false, ...data });
                 let processs = Object.assign({}, state[uuid], { [name]: newProcess });
                 return Object.assign({}, state, { [uuid]: processs });
             },
             [processDelete]: (state, { payload: { uuid, name } }) => {
-                let newProcess = Object.assign({}, (state[uuid][name]: { deleted: true }));
+                let newProcess = Object.assign({}, state[uuid][name], { deleted: true });
                 let processs = Object.assign({}, state[uuid], { [name]: newProcess });
                 return Object.assign({}, state, { [uuid]: processs });
             },

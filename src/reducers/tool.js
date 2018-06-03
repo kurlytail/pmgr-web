@@ -37,12 +37,12 @@ function createToolReducer() {
                 });
             },
             [toolConfigure]: (state, { payload: { uuid, name, data } }) => {
-                let newTool = Object.assign({}, (state[uuid][name]: { deleted: false, ...data }));
+                let newTool = Object.assign({}, state[uuid][name], { deleted: false, ...data });
                 let tools = Object.assign({}, state[uuid], { [name]: newTool });
                 return Object.assign({}, state, { [uuid]: tools });
             },
             [toolDelete]: (state, { payload: { uuid, name } }) => {
-                let newTool = Object.assign({}, (state[uuid][name]: { deleted: true }));
+                let newTool = Object.assign({}, state[uuid][name], { deleted: true });
                 let tools = Object.assign({}, state[uuid], { [name]: newTool });
                 return Object.assign({}, state, { [uuid]: tools });
             },

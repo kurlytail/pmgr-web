@@ -28,7 +28,7 @@ class DocumentListItem extends Component {
             return (
                 <button
                     type="button"
-                    className="btn btn-secondary float-right"
+                    className="btn btn-secondary"
                     onClick={() => this.props.configure({ complete: true, started: false })}
                 >
                     Complete
@@ -39,7 +39,7 @@ class DocumentListItem extends Component {
             return (
                 <button
                     type="button"
-                    className="btn btn-secondary float-right"
+                    className="btn btn-secondary"
                     onClick={() => this.props.configure({ complete: false, started: true })}
                 >
                     Start
@@ -52,15 +52,15 @@ class DocumentListItem extends Component {
     render() {
         return (
             <li className={`list-group-item ${this.statusBackground()}`}>
-                <div className="row">
-                    <div className="col">
-                        <a href={`#/document/${this.props.project}/${this.props.document}`}>
-                            {this.props.documentState.name}
-                        </a>
-                    </div>
-                    <div className="col">
-                        <div className="container-fluid">
-                            <div className="row clearfix">
+                <div className="container">
+                    <div className="row">
+                        <div className="col">
+                            <a href={`#/document/${this.props.project}/${this.props.document}`}>
+                                {this.props.documentState.name}
+                            </a>
+                        </div>
+                        <div className="col">
+                            <div className="row">
                                 <div className="col">{this.props.documentState.progress || 0}%</div>
                                 <div className="col"> {this.getActionButtons()}</div>
                             </div>

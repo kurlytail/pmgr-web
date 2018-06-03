@@ -1,5 +1,6 @@
 import ProjectReducer from '../reducers/project';
 import DocumentReducer from '../reducers/document';
+import ToolReducer from '../reducers/tool';
 import { select, takeEvery, fork, all, put, call } from 'redux-saga/effects';
 import Factory from './factory.js';
 import { runSaga } from '../store';
@@ -8,6 +9,19 @@ import _ from 'lodash';
 const DEBUG = require('debug')('managers/controller');
 
 class Controller {
+    *processDocument(action) {
+        const uuid = action.payload.uuid;
+
+        const project = yield select(_.get, `app.local.projects.${uuid}`);
+        const manager = Factory.newManager(project.manager);
+
+        if (manager) {
+            yield call([manager, manager.processDocuments], uuid);
+        } else {
+            DEBUG('Manager ${manager} not found');
+        }
+    }
+
     *processProject(action) {
         const uuid = action.payload.uuid;
         DEBUG(`Managing ${uuid}`);
@@ -32,7 +46,8 @@ class Controller {
         }
         yield all([
             takeEvery(ProjectReducer.projectConfigureAction, this.processProject),
-            takeEvery(ProjectReducer.projectCreateAction, this.processProject)
+            takeEvery(ProjectReducer.projectCreateAction, this.processProject),
+            takeEvery(DocumentReducer.documentConfigureAction, this.processDocument)
         ]);
     }
 
@@ -44,6 +59,7 @@ class Controller {
 
         DEBUG(`Garbage collecting project ${uuid}`);
         yield put(DocumentReducer.documentProjectDelete(uuid));
+        yield put(ToolReducer.toolProjectDelete(uuid));
         yield put(ProjectReducer.projectGarbageCollect(uuid));
     }
 
@@ -60,6 +76,7 @@ class Controller {
         this.projectWatcher = this.projectWatcher.bind(this);
         this.processProjectDelete = this.processProjectDelete.bind(this);
         this.processProject = this.processProject.bind(this);
+        this.processDocument = this.processDocument.bind(this);
     }
 
     init() {

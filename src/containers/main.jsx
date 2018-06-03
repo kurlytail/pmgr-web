@@ -52,48 +52,61 @@ class MainContainer extends Component {
             // -----------------------------------------------------------------------
         });
         return (
-            <div className="container-fluid">
-                <nav className="navbar navbar-default">
-                    <ul className="nav">
-                        <li className="nav-item" name="back" onClick={StoreInfo.history.goBack} />
-                        <li className="nav-item">
-                            <a className="nav-link" href="#/">
-                                Dashboard
-                            </a>
-                        </li>
+            <div className="app has-fullwidth">
+                <header className="app-header">
+                    <div className="top-bar">
+                        <div className="top-bar-list">
+                            <div className="top-bar-item top-bar-item-right px-0 d-none d-sm-flex">
+                                <ul className="header-nav nav">
+                                    <li className="nav-item dropdown header-nav-dropdown">
+                                        <a
+                                            className="nav-link"
+                                            href="#"
+                                            data-toggle="dropdown"
+                                            aria-haspopup="true"
+                                            aria-expanded="false"
+                                        >
+                                            <span className="oi oi-grid-three-up" />
+                                        </a>
+                                        <div className="dropdown-arrow" />
 
-                        <li className="nav-item">
-                            <a className="nav-link" href="#/project">
-                                Projects
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#/project-type">
-                                Project Types
-                            </a>
-                        </li>
-                    </ul>
-                    <ul className="nav ml-auto">
-                        <li className="nav-item">
-                            <a className="nav-link" onClick={this.saveConfiguration}>
-                                <i className="fa fa-floppy-o" />
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link">
-                                <ReactFileReader
-                                    fileTypes={['.json']}
-                                    base64={true}
-                                    multipleFiles={false}
-                                    handleFiles={this.handleConfigUpload}
-                                >
-                                    <i className="fa fa-folder-open" />
-                                </ReactFileReader>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <main>
+                                        <div className="dropdown-menu dropdown-menu-rich dropdown-menu-right">
+                                            <div className="dropdown-sheets">
+                                                <div className="dropdown-sheet-item">
+                                                    <a href="#" className="tile-wrapper">
+                                                        <span className="tile tile-lg bg-indigo">
+                                                            <i className="oi oi-dashboard" />
+                                                        </span>
+                                                        <span className="tile-peek">Dashboard</span>
+                                                    </a>
+                                                </div>
+
+                                                <div className="dropdown-sheet-item">
+                                                    <a href="#/project" className="tile-wrapper">
+                                                        <span className="tile tile-lg bg-teal">
+                                                            <i className="oi oi-fork" />
+                                                        </span>
+                                                        <span className="tile-peek">Projects</span>
+                                                    </a>
+                                                </div>
+
+                                                <div className="dropdown-sheet-item">
+                                                    <a href="#/project-type" className="tile-wrapper">
+                                                        <span className="tile tile-lg bg-pink">
+                                                            <i className="fa fa-tasks" />
+                                                        </span>
+                                                        <span className="tile-peek">Project types</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <main className="app-main">
                     <Route path="/" exact component={Dashboard} />
                     <Route path="/project" exact component={ProjectList} />
                     <Route path="/project/:uuid" component={Project} />

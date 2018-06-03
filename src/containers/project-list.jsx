@@ -18,78 +18,89 @@ class ProjectList extends Component {
             return { value: key, label: value.name };
         });
         return (
-            <table className="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Project Name</th>
-                        <th>ID</th>
-                        <th>Manager</th>
-                        <th />
-                        <th>Type</th>
-                        <th>Summary</th>
-                        <th>
-                            <button className="btn" onClick={this.props.create}>
-                                <i className="fa fa-plus" />
-                            </button>
-                            <button className="btn" onClick={this.props.gc}>
-                                <i className="fa fa-trash" />
-                            </button>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {_.map(_.omitBy(this.props.projects, project => project.deleted), (meta, uuid) => (
-                        <tr key={uuid} scope="row">
-                            <td>
-                                <InlineEdit
-                                    text={this.props.projects[uuid].name}
-                                    paramName="name"
-                                    change={data => this.props.configure(uuid, data)}
-                                />
-                            </td>
-                            <td>
-                                <a href={'/#/project/' + uuid}>{uuid}</a>
-                            </td>
-                            <td>
-                                <Select
-                                    name="manager"
-                                    options={managerOptions}
-                                    clearable={false}
-                                    value={this.props.projects[uuid].manager}
-                                    simpleValue
-                                    searchable={false}
-                                    onChange={newValue => this.props.configure(uuid, { manager: newValue })}
-                                />
-                            </td>
-                            <td>{Factory.newManager(this.props.projects[uuid].manager).avatar(40)}</td>
-                            <td>
-                                <Select
-                                    name="type"
-                                    options={projectTypeOptions}
-                                    clearable={false}
-                                    value={this.props.projects[uuid].type}
-                                    simpleValue
-                                    searchable={false}
-                                    onChange={newValue => this.props.configure(uuid, { type: newValue })}
-                                />
-                            </td>
-                            <td>
-                                <InlineEdit
-                                    placeholder="Add summary"
-                                    text={this.props.projects[uuid].summary ? this.props.projects[uuid].summary : ''}
-                                    paramName="summary"
-                                    change={data => this.props.configure(uuid, data)}
-                                />
-                            </td>
-                            <td>
-                                <a onClick={() => this.props.del(uuid)}>
-                                    <i className="fa fa-trash" />
+            <div className="table-responsive">
+                <table className="table table-hover">
+                    <thead className="thead-light">
+                        <tr>
+                            <th>Project Name</th>
+                            <th>ID</th>
+                            <th>Manager</th>
+                            <th />
+                            <th>Type</th>
+                            <th>Summary</th>
+                            <th className="align-middle text-right">
+                                <a className="btn btn-sm btn-secondary" onClick={this.props.create}>
+                                    <i className="fa fa-plus" />
+                                    <span className="sr-only">Add</span>
                                 </a>
-                            </td>
+                                <a className="btn btn-sm btn-secondary" onClick={this.props.gc}>
+                                    <i className="far fa-trash-alt" />
+                                    <span className="sr-only">Compact</span>
+                                </a>
+                            </th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {_.map(_.omitBy(this.props.projects, project => project.deleted), (meta, uuid) => (
+                            <tr key={uuid} scope="row">
+                                <td>
+                                    <InlineEdit
+                                        text={this.props.projects[uuid].name}
+                                        paramName="name"
+                                        change={data => this.props.configure(uuid, data)}
+                                    />
+                                </td>
+                                <td>
+                                    <a href={'/#/project/' + uuid}>{uuid}</a>
+                                </td>
+                                <td>
+                                    <Select
+                                        name="manager"
+                                        options={managerOptions}
+                                        clearable={false}
+                                        value={this.props.projects[uuid].manager}
+                                        simpleValue
+                                        searchable={false}
+                                        onChange={newValue => this.props.configure(uuid, { manager: newValue })}
+                                    />
+                                </td>
+                                <td>{Factory.newManager(this.props.projects[uuid].manager).avatar(40)}</td>
+                                <td>
+                                    <Select
+                                        name="type"
+                                        options={projectTypeOptions}
+                                        clearable={false}
+                                        value={this.props.projects[uuid].type}
+                                        simpleValue
+                                        searchable={false}
+                                        onChange={newValue => this.props.configure(uuid, { type: newValue })}
+                                    />
+                                </td>
+                                <td>
+                                    <InlineEdit
+                                        placeholder="Add summary"
+                                        text={
+                                            this.props.projects[uuid].summary ? this.props.projects[uuid].summary : ''
+                                        }
+                                        paramName="summary"
+                                        change={data => this.props.configure(uuid, data)}
+                                    />
+                                </td>
+                                <td className="align-middle text-right">
+                                    <a href="#" className="btn btn-sm btn-secondary">
+                                        <i className="fa fa-pencil-alt" />
+                                        <span className="sr-only">Edit</span>
+                                    </a>
+                                    <a className="btn btn-sm btn-secondary" onClick={() => this.props.del(uuid)}>
+                                        <i className="far fa-trash-alt" />
+                                        <span className="sr-only">Remove</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         );
     }
 }

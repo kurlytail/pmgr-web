@@ -37,12 +37,12 @@ function createProcessGroupReducer() {
                 });
             },
             [processGroupConfigure]: (state, { payload: { uuid, name, data } }) => {
-                let newProcessGroup = Object.assign({}, (state[uuid][name]: { deleted: false, ...data }));
+                let newProcessGroup = Object.assign({}, state[uuid][name], { deleted: false, ...data });
                 let processGroups = Object.assign({}, state[uuid], { [name]: newProcessGroup });
                 return Object.assign({}, state, { [uuid]: processGroups });
             },
             [processGroupDelete]: (state, { payload: { uuid, name } }) => {
-                let newProcessGroup = Object.assign({}, (state[uuid][name]: { deleted: true }));
+                let newProcessGroup = Object.assign({}, state[uuid][name], { deleted: true });
                 let processGroups = Object.assign({}, state[uuid], { [name]: newProcessGroup });
                 return Object.assign({}, state, { [uuid]: processGroups });
             },
