@@ -7,19 +7,23 @@ import InlineEdit from 'react-edit-inline';
 import Select from 'react-select';
 import Elaborate from '../elaborate';
 import ToolListItem from './tool-list-item.jsx';
+import ActivityListItem from './activity-list-item.jsx';
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 class Document extends Component {
     render() {
+        const documentId = this.props.match.params.document;
         const managerName = this.props.document.manager || this.props.project.manager;
         const managerOptions = _.map(Factory.getAllManagers(), value => {
             return { value: value, label: _.startCase(value) };
         });
         const manager = Factory.newManager(managerName, this.props.match.params.project);
 
-        const toolsModifyingDocument = Elaborate.getToolsModifyingDocument(this.props.match.params.document);
-        const toolsUsingDocument = Elaborate.getToolsUsingDocument(this.props.match.params.document);
+        const toolsModifyingDocument = Elaborate.getToolsModifyingDocument(documentId);
+        const toolsUsingDocument = Elaborate.getToolsUsingDocument(documentId);
+        const activitiesModifyingDocument = Elaborate.getActivitiesModifyingDocument(documentId);
+        const activitiesUsingDocument = Elaborate.getActivitiesUsingDocument(documentId);
 
         return (
             <div className="card">
@@ -168,7 +172,15 @@ class Document extends Component {
                                 <div className="card-header">
                                     <h4 className="card-title">Modified by activities</h4>
                                 </div>
-                                <ul className="list-group" />
+                                <ul className="list-group">
+                                    {activitiesModifyingDocument.map(activity => (
+                                        <ActivityListItem
+                                            project={this.props.match.params.project}
+                                            activity={activity}
+                                            key={activity}
+                                        />
+                                    ))}
+                                </ul>
                             </div>
                         </div>
                         <div className="col">
@@ -176,7 +188,15 @@ class Document extends Component {
                                 <div className="card-header">
                                     <h4 className="card-title">Used by activities</h4>
                                 </div>
-                                <ul className="list-group" />
+                                <ul className="list-group">
+                                    {activitiesUsingDocument.map(activity => (
+                                        <ActivityListItem
+                                            project={this.props.match.params.project}
+                                            activity={activity}
+                                            key={activity}
+                                        />
+                                    ))}
+                                </ul>
                             </div>
                         </div>
                     </div>

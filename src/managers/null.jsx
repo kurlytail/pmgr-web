@@ -4,6 +4,7 @@ import _ from 'lodash';
 import ProjectReducer from '../reducers/project';
 import DocumentReducer from '../reducers/document';
 import ToolReducer from '../reducers/tool';
+import ActivityReducer from '../reducers/activity';
 import Factory from './factory';
 import React from 'react';
 import avatar from './null.svg';
@@ -12,29 +13,6 @@ const DEBUG = require('debug')('managers/null');
 class Manager {
     config(uuid) {
         return <div />;
-    }
-
-    *processActivities(uuid) {
-        DEBUG(`processing activities for ${uuid}`);
-
-        let allDocuments = yield select(_.get, `app.local.documents.${uuid}`);
-
-        /* Get documents that are not generated, or have been marked complete */
-        let documents = _.pickBy(allDocuments, doc => doc.complete === 100);
-
-        /* Find activities that can make progress */
-        let completedDocuments = _.keys(documents);
-        const activities = [];
-
-        _.forEach(Elaborate.Activities, activity => {
-            let inputDocuments = _.map(activity.input, 'from');
-            inputDocuments = _.map(_.filter(inputDocuments, doc => doc.name.indexOf('tool_') !== 0), 'name');
-            if (_.intersection(inputDocuments, completedDocuments).length === inputDocuments.length) {
-                activities.push(activity);
-            }
-        });
-
-        return activities;
     }
 
     *processDocuments(uuid) {
@@ -67,6 +45,19 @@ class Manager {
         yield all(tools.map(tool => put(ToolReducer.toolConfigure(uuid, tool.name, { progress: 0 }))));
     }
 
+    *processActivities(uuid) {
+        DEBUG(`processing activities for ${uuid}`);
+        let allActivities = yield select(_.get, `app.local.activities.${uuid}`);
+        allActivities = allActivities || {};
+
+        let activities = Elaborate.Activities.filter(activity => !allActivities[activity.name]);
+
+        yield all(activities.map(activity => put(ActivityReducer.activityCreate(uuid, activity.name))));
+        yield all(
+            activities.map(activity => put(ActivityReducer.activityConfigure(uuid, activity.name, { progress: 0 })))
+        );
+    }
+
     *processProject(uuid) {
         let project = yield select(_.get, `app.local.projects.${uuid}`);
 
@@ -76,7 +67,7 @@ class Manager {
         yield select(_.get, `app.local.projectTypes.${project.type}`);
         yield call([this, this.processDocuments], uuid);
         yield call([this, this.processTools], uuid);
-        //let activities = yield call([this, this.processActivities], uuid);
+        yield call([this, this.processActivities], uuid);
     }
 
     avatar(dim = 100) {

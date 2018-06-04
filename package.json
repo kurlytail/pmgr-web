@@ -5,6 +5,10 @@
     "main": "dist/index.min.js",
     "dependencies": {
         "debug": "^3.1.0",
+        "devtron": "^1.4.0",
+        "electron": "^2.0.2",
+        "electron-debug": "^2.0.0",
+        "electron-reload": "^1.2.2",
         "history": "^4.7.2",
         "lodash": "^4.17.4",
         "markdown-to-jsx": "^6.3.1",

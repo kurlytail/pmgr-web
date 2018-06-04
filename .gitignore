@@ -1,6 +1,7 @@
 *tgz
 docs/
 dist/
+!dist/assets
 node_modules/
 test-report.xml
 coverage/

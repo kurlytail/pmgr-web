@@ -30,19 +30,19 @@ function createActivityReducer() {
     let reducer = handleActions(
         {
             [activityCreate]: (state, { payload: { uuid, name } }) => {
-                let newActivity = { deleted: false, name: 'Activity Name' };
+                let newActivity = { deleted: false, name: _.startCase(name) };
                 let activities = Object.assign({}, state[uuid], { [name]: newActivity });
                 return Object.assign({}, state, {
                     [uuid]: activities
                 });
             },
             [activityConfigure]: (state, { payload: { uuid, name, data } }) => {
-                let newActivity = Object.assign({}, (state[uuid][name]: { deleted: false, ...data }));
+                let newActivity = Object.assign({}, state[uuid][name], { deleted: false, ...data });
                 let activities = Object.assign({}, state[uuid], { [name]: newActivity });
                 return Object.assign({}, state, { [uuid]: activities });
             },
             [activityDelete]: (state, { payload: { uuid, name } }) => {
-                let newActivity = Object.assign({}, (state[uuid][name]: { deleted: true }));
+                let newActivity = Object.assign({}, state[uuid][name], { deleted: true });
                 let activities = Object.assign({}, state[uuid], { [name]: newActivity });
                 return Object.assign({}, state, { [uuid]: activities });
             },

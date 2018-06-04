@@ -31,26 +31,6 @@ class MainContainer extends Component {
     }
 
     render() {
-        $(document).ready(function() {
-            // -----------------------------------------------------------------------
-            $.each($('nav').find('li'), function() {
-                $(this).addClass(
-                    'active',
-                    window.location.hash ===
-                        $(this)
-                            .find('a')
-                            .attr('href')
-                );
-                $(this).removeClass(
-                    'active',
-                    window.location.hash ===
-                        $(this)
-                            .find('a')
-                            .attr('href')
-                );
-            });
-            // -----------------------------------------------------------------------
-        });
         return (
             <div className="app has-fullwidth">
                 <header className="app-header">

@@ -30,7 +30,7 @@ function createToolReducer() {
     let reducer = handleActions(
         {
             [toolCreate]: (state, { payload: { uuid, name } }) => {
-                let newTool = { deleted: false, name: _.startCase(name) };
+                let newTool = { deleted: false, name: _.startCase(name.replace(/^tool_/, '')) };
                 let tools = Object.assign({}, state[uuid], { [name]: newTool });
                 return Object.assign({}, state, {
                     [uuid]: tools

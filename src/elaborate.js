@@ -63,6 +63,30 @@ class Elaborate {
 
         return tools;
     }
+
+    getActivitiesModifyingDocument(documentName) {
+        const activities = this.Activities.reduce((activities, activity) => {
+            const documents = _.map(_.map(activity.output, 'to'), 'name');
+            if (documents.includes(documentName)) {
+                return [activity.name, ...activities];
+            }
+            return activities;
+        }, []);
+
+        return activities;
+    }
+
+    getActivitiesUsingDocument(documentName) {
+        const activities = this.Activities.reduce((activities, activity) => {
+            const documents = _.map(_.map(activity.input, 'from'), 'name');
+            if (documents.includes(documentName)) {
+                return [activity.name, ...activities];
+            }
+            return activities;
+        }, []);
+
+        return activities;
+    }
 }
 
 let _elaborate = new Elaborate();
