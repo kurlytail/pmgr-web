@@ -80,7 +80,7 @@
         "build:dll": "npm run build -- --config ./webpack_dll.config.js",
         "build": "NODE_ENV=\"debug\" webpack --display-modules --display-reasons",
         "start": "webpack-dev-server",
-        "start-local" : "electron electron.js --debug",
+        "start-local" : "electron main.js --debug",
         "lint": "eslint src",
         "test": "jest tests",
         "test:watch": "jest --watch tests",

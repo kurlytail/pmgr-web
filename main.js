@@ -3,7 +3,7 @@ const electron = require('electron');
 const { app, BrowserWindow } = electron;
 
 // Let electron reloads by itself when webpack watches changes in ./app/
-require('electron-reload')(__dirname);
+require('electron-reload')(`${__dirname}/dist`);
 require('electron-debug')();
 
 // To avoid being garbage collected

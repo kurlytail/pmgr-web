@@ -51,7 +51,7 @@ class ProjectList extends Component {
                                     />
                                 </td>
                                 <td>
-                                    <a href={'/#/project/' + uuid}>{uuid}</a>
+                                    <a href={`/#/project/${uuid}`}>{uuid}</a>
                                 </td>
                                 <td>
                                     <Select
