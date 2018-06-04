@@ -2,7 +2,7 @@
     "name": "@kurlytail/model",
     "description": "PMGR Model",
     "version": "99.99.99",
-    "main": "dist/index.min.js",
+    "main": "main.js",
     "dependencies": {
         "debug": "^3.1.0",
         "devtron": "^1.4.0",
@@ -80,6 +80,7 @@
         "build:dll": "npm run build -- --config ./webpack_dll.config.js",
         "build": "NODE_ENV=\"debug\" webpack --display-modules --display-reasons",
         "start": "webpack-dev-server",
+        "start-local" : "electron electron.js --debug",
         "lint": "eslint src",
         "test": "jest tests",
         "test:watch": "jest --watch tests",
