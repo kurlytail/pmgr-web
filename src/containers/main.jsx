@@ -5,6 +5,8 @@ import ProjectType from './project-type.jsx';
 import ProjectTypeList from './project-type-list.jsx';
 import Dashboard from './dashboard.jsx';
 import Document from './document.jsx';
+import Tool from './tool.jsx';
+import Activity from './activity.jsx';
 import { Route } from 'react-router-dom';
 import FileDownload from 'react-file-download';
 import ReactFileReader from 'react-file-reader';
@@ -93,6 +95,8 @@ class MainContainer extends Component {
                     <Route path="/project-type" exact component={ProjectTypeList} />
                     <Route path="/project-type/:uuid" component={ProjectType} />
                     <Route path="/document/:project/:document" component={Document} />
+                    <Route path="/tool/:project/:tool" component={Tool} />
+                    <Route path="/activity/:project/:activity" component={Activity} />
                 </main>
             </div>
         );

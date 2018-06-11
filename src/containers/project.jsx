@@ -8,6 +8,7 @@ import Factory from '../managers';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import DocumentListItem from './document-list-item.jsx';
+import ActivityListItem from './activity-list-item.jsx';
 
 class Project extends Component {
     render() {
@@ -21,7 +22,7 @@ class Project extends Component {
                 <div className="card-header">
                     <div className="row">
                         <div className="col col-xs-10 col-sm-10 col-md-10 col-lg-10">
-                            <h6 className="text-muted">Project</h6>
+                            <h1 className="text-muted">Project</h1>
                             <h1 className="card-title">
                                 <InlineEdit
                                     text={this.props.project.name}
@@ -79,6 +80,69 @@ class Project extends Component {
                     <div className="col">
                         <div className="card">
                             <div className="card-header">
+                                <h4 className="card-title">Completed activities</h4>
+                            </div>
+                            <ul className="list-group">
+                                {_.map(
+                                    _.pickBy(this.props.activities, activity => activity.complete),
+                                    (activity, key) => (
+                                        <ActivityListItem
+                                            project={this.props.match.params.uuid}
+                                            activity={key}
+                                            key={key}
+                                        />
+                                    )
+                                )}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="card">
+                            <div className="card-header">
+                                <h4 className="card-title">Activities in progress</h4>
+                            </div>
+                            <ul className="list-group">
+                                {_.map(
+                                    _.pickBy(this.props.activities, activity => !activity.complete && activity.started),
+                                    (activity, key) => (
+                                        <ActivityListItem
+                                            project={this.props.match.params.uuid}
+                                            activity={key}
+                                            key={key}
+                                        />
+                                    )
+                                )}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="card">
+                            <div className="card-header">
+                                <h4 className="card-title">Activities to be started</h4>
+                            </div>
+                            <ul className="list-group">
+                                {_.map(
+                                    _.pickBy(
+                                        this.props.activities,
+                                        activity => !activity.started && !activity.complete
+                                    ),
+                                    (activity, key) => (
+                                        <ActivityListItem
+                                            project={this.props.match.params.uuid}
+                                            activity={key}
+                                            key={key}
+                                        />
+                                    )
+                                )}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="col">
+                        <div className="card">
+                            <div className="card-header">
                                 <h4 className="card-title">Completed documents</h4>
                             </div>
                             <ul className="list-group">
@@ -93,7 +157,6 @@ class Project extends Component {
                             <div className="card-header">
                                 <h4 className="card-title">Documents being processed</h4>
                             </div>
-
                             <ul className="list-group">
                                 {_.map(
                                     _.pickBy(this.props.documents, doc => !doc.complete && doc.started),
@@ -136,7 +199,8 @@ class Project extends Component {
 const mapProps = (state, props) => {
     return {
         project: state.app.local.projects[props.match.params.uuid],
-        documents: state.app.local.documents[props.match.params.uuid]
+        documents: state.app.local.documents[props.match.params.uuid],
+        activities: state.app.local.activities[props.match.params.uuid]
     };
 };
 
