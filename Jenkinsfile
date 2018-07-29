@@ -32,7 +32,7 @@ pipeline {
         stage ('Build Dev') {
             steps {
                 sh '''
-                    npm run build:debug
+                    npm run build
                 '''
             }
         }
@@ -40,7 +40,7 @@ pipeline {
         stage ('Build Release') {
             steps {
                 sh '''
-                    npm run build:prod
+                    npm run build
                 '''
             }
         }
