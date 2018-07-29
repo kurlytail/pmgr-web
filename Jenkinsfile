@@ -1,5 +1,7 @@
 pipeline {
-    agent any;
+    agent {
+        label 'node-build'
+    }
 
     stages {
         stage('Prepare') {
