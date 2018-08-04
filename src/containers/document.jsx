@@ -5,7 +5,7 @@ import Factory from '../managers';
 import _ from 'lodash';
 import InlineEdit from 'react-edit-inline';
 import Select from 'react-select';
-import Elaborate from '../elaborate';
+import Schema from '../schema';
 import ToolListItem from './tool-list-item.jsx';
 import ActivityListItem from './activity-list-item.jsx';
 import Slider, { Range } from 'rc-slider';
@@ -19,11 +19,7 @@ class Document extends Component {
             return { value: value, label: _.startCase(value) };
         });
         const manager = Factory.newManager(managerName, this.props.match.params.project);
-
-        const toolsModifyingDocument = Elaborate.getToolsModifyingDocument(documentId);
-        const toolsUsingDocument = Elaborate.getToolsUsingDocument(documentId);
-        const activitiesModifyingDocument = Elaborate.getActivitiesModifyingDocument(documentId);
-        const activitiesUsingDocument = Elaborate.getActivitiesUsingDocument(documentId);
+        const documentSchema = Schema.Document.getObject(documentId);
 
         return (
             <div className="card">
@@ -140,7 +136,7 @@ class Document extends Component {
                                     <h4 className="card-title">Modified by tools</h4>
                                 </div>
                                 <ul className="list-group">
-                                    {toolsModifyingDocument.map(tool => (
+                                    {documentSchema.modifiedByTools.map(tool => (
                                         <ToolListItem
                                             project={this.props.match.params.project}
                                             tool={tool}
@@ -156,7 +152,7 @@ class Document extends Component {
                                     <h4 className="card-title">Used by tools</h4>
                                 </div>
                                 <ul className="list-group">
-                                    {toolsUsingDocument.map(tool => (
+                                    {documentSchema.usedbyTools.map(tool => (
                                         <ToolListItem
                                             project={this.props.match.params.project}
                                             tool={tool}
@@ -174,7 +170,7 @@ class Document extends Component {
                                     <h4 className="card-title">Modified by activities</h4>
                                 </div>
                                 <ul className="list-group">
-                                    {activitiesModifyingDocument.map(activity => (
+                                    {documentSchema.modifiedByActivities.map(activity => (
                                         <ActivityListItem
                                             project={this.props.match.params.project}
                                             activity={activity}
@@ -190,7 +186,7 @@ class Document extends Component {
                                     <h4 className="card-title">Used by activities</h4>
                                 </div>
                                 <ul className="list-group">
-                                    {activitiesUsingDocument.map(activity => (
+                                    {documentSchema.usedByActivities.map(activity => (
                                         <ActivityListItem
                                             project={this.props.match.params.project}
                                             activity={activity}

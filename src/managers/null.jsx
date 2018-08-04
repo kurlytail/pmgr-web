@@ -1,5 +1,4 @@
 import { takeEvery, fork, select, all, call, put } from 'redux-saga/effects';
-import Elaborate from '../elaborate';
 import _ from 'lodash';
 import ProjectReducer from '../reducers/project';
 import DocumentReducer from '../reducers/document';

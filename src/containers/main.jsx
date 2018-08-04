@@ -5,6 +5,7 @@ import ProjectType from './project-type.jsx';
 import ProjectTypeList from './project-type-list.jsx';
 import Dashboard from './dashboard.jsx';
 import Document from './document.jsx';
+import Designer from './designer.jsx';
 import Tool from './tool.jsx';
 import Activity from './activity.jsx';
 import { Route } from 'react-router-dom';
@@ -80,6 +81,15 @@ class MainContainer extends Component {
                                                         <span className="tile-peek">Project types</span>
                                                     </a>
                                                 </div>
+
+                                                <div className="dropdown-sheet-item">
+                                                    <a href="#/designer" className="tile-wrapper">
+                                                        <span className="tile tile-lg bg-pink">
+                                                            <i className="fa fa-tasks" />
+                                                        </span>
+                                                        <span className="tile-peek">Designer</span>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </li>
@@ -97,6 +107,7 @@ class MainContainer extends Component {
                     <Route path="/document/:project/:document" component={Document} />
                     <Route path="/tool/:project/:tool" component={Tool} />
                     <Route path="/activity/:project/:activity" component={Activity} />
+                    <route path="/designer" component={Designer} />
                 </main>
             </div>
         );

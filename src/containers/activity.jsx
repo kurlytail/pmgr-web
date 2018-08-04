@@ -5,7 +5,6 @@ import Factory from '../managers';
 import _ from 'lodash';
 import InlineEdit from 'react-edit-inline';
 import Select from 'react-select';
-import Elaborate from '../elaborate';
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 

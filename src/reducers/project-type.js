@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { injectReducer } from '../store';
 import { createActions, handleActions } from 'redux-actions';
-import Elaborate from '../elaborate';
 import generateName from 'project-name-generator';
 import uuid from 'uuid/v4';
+import Schema from '../schema';
 
 const STATE_PATH = 'app.local.projectTypes';
 const NULL_UUID = '00000000-0000-0000-0000-000000000000';
@@ -42,11 +42,11 @@ function createprojectTypeReducer() {
         {
             [projectTypeCreate]: state => {
                 let activities = {};
-                _.forEach(Elaborate.Activities, activity => {
+                _.forEach(Schema.Activity.activities, activity => {
                     activities[activity.name] = 'ignore';
                 });
                 let tools = {};
-                _.forEach(Elaborate.Tools, tool => {
+                _.forEach(Schema.Tool.tools, tool => {
                     tools[tool.name] = 'ignore';
                 });
 

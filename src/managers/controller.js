@@ -7,7 +7,7 @@ import { select, takeEvery, fork, all, put, call } from 'redux-saga/effects';
 import Factory from './factory.js';
 import { runSaga } from '../store';
 import _ from 'lodash';
-import Elaborate from '../elaborate';
+import Schema from '../schema';
 
 const DEBUG = require('debug')('managers/controller');
 
@@ -51,11 +51,11 @@ class Controller {
         let allDocuments = yield select(_.get, `app.local.documents.${uuid}`);
         allDocuments = allDocuments || {};
 
-        let inputDocs = Elaborate.Documents.filter(
+        let inputDocs = Schema.Document.documents.filter(
             doc => (!doc.input || doc.input.length === 0) && !allDocuments[doc.name]
         );
 
-        let allDocs = Elaborate.Documents.filter(doc => !allDocuments[doc.name]);
+        let allDocs = Schema.Document.documents.filter(doc => !allDocuments[doc.name]);
 
         yield all(allDocs.map(doc => put(DocumentReducer.documentCreate(uuid, doc.name))));
         yield all(
@@ -70,7 +70,7 @@ class Controller {
         let allTools = yield select(_.get, `app.local.tools.${uuid}`);
         allTools = allTools || {};
 
-        let tools = Elaborate.Tools.filter(tool => !allTools[tool.name]);
+        let tools = Schema.Tool.tools.filter(tool => !allTools[tool.name]);
 
         yield all(tools.map(tool => put(ToolReducer.toolCreate(uuid, tool.name))));
         yield all(tools.map(tool => put(ToolReducer.toolConfigure(uuid, tool.name, { progress: 0 }))));
@@ -81,7 +81,7 @@ class Controller {
         let allActivities = yield select(_.get, `app.local.activities.${uuid}`);
         allActivities = allActivities || {};
 
-        let activities = Elaborate.Activities.filter(activity => !allActivities[activity.name]);
+        let activities = Schema.Activity.activities.filter(activity => !allActivities[activity.name]);
 
         yield all(activities.map(activity => put(ActivityReducer.activityCreate(uuid, activity.name))));
         yield all(
@@ -94,7 +94,9 @@ class Controller {
         let allProcessGroups = yield select(_.get, `app.local.processGroups.${uuid}`);
         allProcessGroups = allProcessGroups || {};
 
-        let processGroups = Elaborate.ProcessGroups.filter(processGroup => !allProcessGroups[processGroup.name]);
+        let processGroups = Schema.ProcessGroup.processGroups.filter(
+            processGroup => !allProcessGroups[processGroup.name]
+        );
 
         yield all(
             processGroups.map(processGroup => put(ProcessGroupReducer.processGroupCreate(uuid, processGroup.name)))
