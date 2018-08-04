@@ -18,8 +18,6 @@ class Controller {
         const project = yield select(_.get, `app.local.projects.${uuid}`);
         const manager = Factory.newManager(project.manager);
 
-        /* Implement tool invariants if any */
-
         if (manager && manager.processTools) {
             yield call([manager, manager.processTools], uuid);
         }
