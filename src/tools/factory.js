@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-var factory = {};
+const factory = {};
 function register(name, toolClass) {
     factory[name] = toolClass;
 }

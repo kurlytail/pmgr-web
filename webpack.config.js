@@ -17,7 +17,9 @@ const showConfigOnly = '1' === process.env.SHOW_CONFIG_ONLY || 'true' === proces
 
 // Read dependencies key from package.json, and map out regex obj's
 //   for advanced filtering.
-let { dependencies } = require('./package.json');
+let {
+    dependencies
+} = require('./package.json');
 dependencies = Object.keys(dependencies).map(key => {
     return new RegExp(`^${key}.*`);
 });
@@ -29,12 +31,12 @@ const config = {
 
     output: {
         filename: `[name]${isDist}.js`,
-        path: path.join(__dirname, 'dist'),
+        path: distPath,
         pathinfo: !isProd,
         libraryTarget: 'var'
     },
 
-    devtool: isProd ? false : 'inline-source-map',
+    devtool: 'inline-source-map',
 
     resolve: {
         extensions: ['.js'],
@@ -59,9 +61,8 @@ const config = {
     ],
 
     module: {
-        rules: [
-            {
-                test: /\.js$/,
+        rules: [{
+                test: /\.jsx?$/,
                 enforce: 'pre',
                 use: [
                     'source-map-loader',
@@ -75,12 +76,7 @@ const config = {
             },
             {
                 exclude: /node_modules/,
-                test: /\.js$/,
-                loader: 'babel-loader'
-            },
-            {
-                exclude: /node_modules/,
-                test: /\.jsx$/,
+                test: /\.jsx?$/,
                 loader: 'babel-loader'
             },
             {
@@ -103,8 +99,7 @@ const config = {
             },
             {
                 test: /\.less$/,
-                use: [
-                    {
+                use: [{
                         loader: 'style-loader'
                     },
                     {
@@ -126,11 +121,26 @@ const config = {
         ]
     },
 
-    target: 'web'
+    resolve: {
+        extensions: ['.js', '.jsx']
+    },
+
+    target: 'web',
+
+    devServer: {
+        contentBase: distPath,
+        hot: true,
+        proxy: {
+            '/api': 'http://localhost:9000'
+        }
+    }
 };
 
 if (isProd) {
-    config.plugins.push(new UglifyEsPlugin({ mangle: true, compress: true }));
+    config.plugins.push(new UglifyEsPlugin({
+        mangle: true,
+        compress: true
+    }));
 }
 
 // If ran with SHOW_CONFIG_ONLY=1|true, only show the config and exit cleanly

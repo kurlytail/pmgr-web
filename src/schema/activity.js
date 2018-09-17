@@ -31,13 +31,19 @@ class Activity {
         this.process = Builder.getObject('Process', json.process);
         this.processGroup = Builder.getObject('ProcessGroup', json.processGroup);
         this.inputs = json.inputs.reduce((inputs, inputName) =>
-            Object.assign({}, inputName => ({ [inputName]: Builder.getObject('Document', inputName) })), {}
+            Object.assign({}, {
+                [inputName]: Builder.getObject('Document', inputName)
+            }), {}
         );
-        this.outputs = json.outputs.reduce((outputs, inputName) =>
-            Object.assign({}, outputName => ({ [outputName]: Builder.getObject('Document', outputName) })), {}
+        this.outputs = json.outputs.reduce((outputs, outputName) =>
+            Object.assign({}, {
+                [outputName]: Builder.getObject('Document', outputName)
+            }), {}
         );
-        this.tools = json.tools.reduce((tools, tooName) =>
-            Object.assign({}, toolName => ({ [toolName]: Builder.getObject('Tool', toolName) })), {}
+        this.tools = json.tools.reduce((tools, toolName) =>
+            Object.assign({}, {
+                [toolName]: Builder.getObject('Tool', toolName)
+            }), {}
         );
     }
 }

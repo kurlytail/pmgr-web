@@ -1,4 +1,4 @@
-import jsonSchema from './schema.json';
+
 import Builder from './builder';
 
 class Document {

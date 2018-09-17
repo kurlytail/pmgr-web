@@ -1,10 +1,10 @@
-
+import React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'react-router-redux';
 import { StoreInfo, finalizeStore } from './store';
 import './styles/style.css';
-
-import './reducers';
-import './managers';
+import MainContainer from './containers/main';
 
 finalizeStore();
 

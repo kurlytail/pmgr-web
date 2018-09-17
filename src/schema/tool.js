@@ -21,9 +21,7 @@ class Tool {
     }
 
     buildObject() {
-        const activities = Object.entries(jsonSchema).filter(([, activity]) =>
-            activity.tools.includes(`tool_${this.name}`)
-        );
+        const activities = Object.entries(jsonSchema).filter(([, activity]) => activity.tools.includes(`tool_${this.name}`));
 
         const inputs = activities.reduce((inputs, [, activity]) => new Set([...inputs, ...activity.inputs]), new Set());
         const outputs = activities.reduce(
@@ -39,7 +37,9 @@ class Tool {
             new Set()
         );
 
-        Object.assign(this, { inputs: {}, outputs: {}, processes: {}, processGroups: {}, activities: {} });
+        Object.assign(this, {
+            inputs: {}, outputs: {}, processes: {}, processGroups: {}, activities: {}
+        });
 
         inputs.forEach(input => (this.inputs[input] = Builder.getObject('Document', input)));
         outputs.forEach(output => (this.outputs[output] = Builder.getObject('Document', output)));

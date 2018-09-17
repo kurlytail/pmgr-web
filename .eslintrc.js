@@ -1,6 +1,6 @@
 module.exports = {
-    extends: ['eslint:recommended', 'plugin:jest/recommended', 'prettier'],
-    plugins: ['babel', 'jest'],
+    extends: ['eslint:recommended', 'plugin:jest/recommended', 'prettier', 'airbnb-base', 'plugin:react/recommended'],
+    plugins: ['babel', 'jest', 'react'],
     parser: 'babel-eslint',
     env: {
         browser: true,
@@ -24,5 +24,19 @@ module.exports = {
         ecmaVersion: 6,
         ecmaFeatures: { jsx: true }
     },
-    globals: { React: true }
+    globals: { React: true },
+    settings: {
+        react: {
+            createClass: "createReactClass",
+            pragma: "React",
+            version: 15.4,
+            flowVersion: "0.53" 
+        },
+        propWrapperFunctions: [ "forbidExtraProps" ],
+        "import/resolver": {
+            "babel-module" : {
+                extensions: [ ".js", ".jsx" ]
+            }
+        }
+    }
 };

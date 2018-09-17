@@ -1,11 +1,18 @@
-'use strict';
-
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import {
+    createStore,
+    combineReducers,
+    applyMiddleware
+} from 'redux';
 import _ from 'lodash';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import {
+    composeWithDevTools
+} from 'redux-devtools-extension';
 import TH from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import { routerReducer, routerMiddleware } from 'react-router-redux';
+import {
+    routerReducer,
+    routerMiddleware
+} from 'react-router-redux';
 import createHistory from 'history/createHashHistory';
 
 const StoreInfo = {
@@ -15,14 +22,15 @@ const StoreInfo = {
 };
 
 const sagaMiddleware = createSagaMiddleware();
-const enhancer = composeWithDevTools(applyMiddleware(TH, sagaMiddleware, routerMiddleware(StoreInfo.history)));
+const enhancer = composeWithDevTools(applyMiddleware(TH, sagaMiddleware,
+    routerMiddleware(StoreInfo.history)));
 const globalAsyncReducers = {};
 
 function createReducer(asyncReducers, pathPrefix) {
     const constructedReducers = {};
 
     _.each(asyncReducers, (reducer, key) => {
-        let keyPath = pathPrefix + '.' + key;
+        const keyPath = `${pathPrefix}.${key}`;
         if (typeof reducer !== 'function') {
             constructedReducers[key] = createReducer(reducer, keyPath);
             globalAsyncReducers[keyPath] = constructedReducers[key];
@@ -32,24 +40,24 @@ function createReducer(asyncReducers, pathPrefix) {
         }
     });
 
-    let reducer = combineReducers(constructedReducers);
+    const reducer = combineReducers(constructedReducers);
     reducer.slice = pathPrefix;
 
     return reducer;
 }
 
 function checkReducer(path) {
-    return globalAsyncReducers['.' + path];
+    return globalAsyncReducers[`.${path}`];
 }
 
 function checkReducers(path) {
     /* Return all reducers Rooted at this path */
-    const searchPath = '.' + path + '.';
+    const searchPath = `.${path}.`;
     return _.filter(globalAsyncReducers, (reducer, key) => _.startsWith(key, searchPath));
 }
 
 function injectReducer(path, asyncReducer) {
-    let reducer = globalAsyncReducers[path];
+    const reducer = globalAsyncReducers[path];
     if (reducer) return reducer;
 
     _.set(StoreInfo.asyncReducers, path, asyncReducer);
@@ -58,12 +66,13 @@ function injectReducer(path, asyncReducer) {
 }
 
 const allSagas = [];
+
 function runSaga(saga) {
     allSagas.push(saga);
 }
 
 function finalizeStore() {
-    const loadStorage = storage => {
+    const loadStorage = (storage) => {
         try {
             const serializedState = storage.getItem('pmgr');
             if (serializedState === null) {
@@ -84,8 +93,7 @@ function finalizeStore() {
     const localState = loadStorage(localStorage);
 
     StoreInfo.store = createStore(
-        createReducer(StoreInfo.asyncReducers, ''),
-        {
+        createReducer(StoreInfo.asyncReducers, ''), {
             app: {
                 local: localState
             }
@@ -100,6 +108,13 @@ function finalizeStore() {
 
 injectReducer('routing', routerReducer);
 
-export { StoreInfo, checkReducer, injectReducer, checkReducers, runSaga, finalizeStore };
+export {
+    StoreInfo,
+    checkReducer,
+    injectReducer,
+    checkReducers,
+    runSaga,
+    finalizeStore
+};
 
 /* End */
