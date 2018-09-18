@@ -1,39 +1,50 @@
 import _ from 'lodash';
-import { injectReducer, runSaga } from '../store';
-import { take, call, put } from 'redux-saga/effects';
+import {
+    take,
+    call,
+    put
+} from 'redux-saga/effects';
 import Axios from 'axios';
+import {
+    injectReducer,
+    runSaga
+} from '../store';
 
 class LoginReducer {
-
-    doLogin({ payload : { email, password } }) {
+    static doLogin({
+        payload: {
+            email,
+            password
+        }
+    }) {
         return Axios.post('/api/auth/session', {
-            params : { email, password }
+            params: {
+                email,
+                password
+            }
         });
     }
 
-    doLogout() {
+    static doLogout() {
         return Axios.delete('/api/auth/session');
     }
 
-    *loginSaga() {
+    * loginSaga() {
         do {
-            const loginAction = take([this.loginAction]);
+            const loginAction = yield take([this.loginAction]);
             let account;
 
             try {
-                account = yield call([this, this.doLogin], loginAction);
+                account = yield call(LoginReducer.doLogin, loginAction);
+                yield put(this.loginSuccess(account));
+
+                const logoutAction = yield take([this.logoutAction]);
+
+                /* Start a rest transaction */
+                yield call(LoginReducer.doLogout, logoutAction);
             } catch (ex) {
                 yield put(this.loginFailure());
-                continue;
             }
-            yield put(this.loginSuccess(account));
-
-            const logoutAction = take([this.logoutAction]);
-
-            /* Start a rest transaction */
-            yield call([this, this.doLogout], logoutAction);
-            yield put(this.logout());
-
         } while (true);
     }
 
@@ -49,15 +60,31 @@ class LoginReducer {
     }
 
     login(email, password) {
-        return { type: this.loginAction, payload : { email, password } };
+        return {
+            type: this.loginAction,
+            payload: {
+                email,
+                password
+            }
+        };
     }
 
-    static loginHandler(state, { payload: { email, password } }) {
-        return { email, password };
+    static loginHandler(state, {
+        payload: {
+            email,
+            password
+        }
+    }) {
+        return {
+            email,
+            password
+        };
     }
 
     logout() {
-        return { type: this.logoutAction };
+        return {
+            type: this.logoutAction
+        };
     }
 
     static logoutHandler() {
@@ -65,15 +92,26 @@ class LoginReducer {
     }
 
     loginSuccess(account) {
-        return { type: this.loginSuccess, payload: { account } };
+        return {
+            type: this.loginSuccess,
+            payload: {
+                account
+            }
+        };
     }
 
-    static loginSuccessHandler(state, { payload: account }) {
-        return { account };
+    static loginSuccessHandler(state, {
+        payload: account
+    }) {
+        return {
+            account
+        };
     }
 
     loginFailure() {
-        return { type: this.logoutSuccess };
+        return {
+            type: this.logoutSuccess
+        };
     }
 
     static loginFailureHandler() {
@@ -81,20 +119,20 @@ class LoginReducer {
     }
 
     reducer(state = _.get(localStorage.getItem('pmgr'), this.LOCAL_STORAGE_PATH) || {}, action) {
-        switch(action.type) {
-            case this.loginAction:
+        switch (action.type) {
+        case this.loginAction:
             return LoginReducer.loginHandler(state, action);
 
-            case this.logoutAction:
+        case this.logoutAction:
             return LoginReducer.logoutHandler(state, action);
 
-            case this.loginSuccessAction:
+        case this.loginSuccessAction:
             return LoginReducer.loginSuccessHandler(state, action);
 
-            case this.loginFailureAction:
+        case this.loginFailureAction:
             return LoginReducer.loginFailureHandler(state, action);
 
-            default:
+        default:
             return state;
         }
     }
