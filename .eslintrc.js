@@ -11,7 +11,7 @@ module.exports = {
     },
     rules: {
         'comma-dangle': ['error', 'never'],
-        indent: ['error', 4, { SwitchCase: 1 }],
+        indent: ['error', 4 ],
         'linebreak-style': ['error', 'unix'],
         'no-unused-vars': ['warn'],
         'no-console': 2,

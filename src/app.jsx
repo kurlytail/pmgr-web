@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { StoreInfo, finalizeStore } from './store';
+import './reducers';
 import './styles/style.css';
 import MainContainer from './containers/main';
 
