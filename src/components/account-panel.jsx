@@ -27,11 +27,9 @@ class AccountPanel extends Component {
                 <div className="dropdown-menu">
                     <h6 className="dropdown-header d-none d-md-block d-lg-none">Beni Arisandi</h6>
                     <a className="dropdown-item" href="user-profile.html">
-                        {' '}
                         <span className="dropdown-icon oi oi-person" /> Profile
-                    </a>{' '}
-                    <a className="dropdown-item" href="auth-signin-v1.html">
-                        {' '}
+                    </a>
+                    <a className="dropdown-item" onClick={() => this.props.logout()} href="#">
                         <span className="dropdown-icon oi oi-account-logout" /> Logout
                     </a>
                     <div className="dropdown-divider" />
@@ -51,7 +49,8 @@ class AccountPanel extends Component {
 }
 
 AccountPanel.propTypes = {
-    account: PropTypes.object
+    account: PropTypes.object,
+    logout: PropTypes.func
 };
 
 export default AccountPanel;
