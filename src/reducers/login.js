@@ -1,42 +1,34 @@
 import _ from 'lodash';
-import {
-    take,
-    call,
-    put
-} from 'redux-saga/effects';
+import { take, call, put, select } from 'redux-saga/effects';
 import Axios from 'axios';
-import {
-    injectReducer,
-    runSaga
-} from '../store';
+import { injectReducer, runSaga } from '../store';
 
 class LoginReducer {
-    static doLogin({
-        payload: {
+    static doLogin({ payload: { email, password } }) {
+        return Axios.post('/auth/session', {
             email,
             password
-        }
-    }) {
-        return Axios.post('/api/auth/session', {
-            params: {
-                email,
-                password
-            }
-        });
+        }).then(response => response.data);
     }
 
     static doLogout() {
-        return Axios.delete('/api/auth/session');
+        return Axios.delete('/auth/session');
     }
 
-    * loginSaga() {
+    *loginSaga() {
         do {
-            const loginAction = yield take([this.loginAction]);
-            let account;
+            let account = yield select(_.get, `${this.STATE_PATH}.account`);
+
+            let loginAction;
+            if (!account) {
+                loginAction = yield take([this.loginAction]);
+            }
 
             try {
-                account = yield call(LoginReducer.doLogin, loginAction);
-                yield put(this.loginSuccess(account));
+                if (!account) {
+                    account = yield call(LoginReducer.doLogin, loginAction);
+                    yield put(this.loginSuccess(account));
+                }
 
                 const logoutAction = yield take([this.logoutAction]);
 
@@ -69,12 +61,12 @@ class LoginReducer {
         };
     }
 
-    static loginHandler(state, {
-        payload: {
-            email,
-            password
+    static loginHandler(
+        state,
+        {
+            payload: { email, password }
         }
-    }) {
+    ) {
         return {
             email,
             password
@@ -93,16 +85,14 @@ class LoginReducer {
 
     loginSuccess(account) {
         return {
-            type: this.loginSuccess,
+            type: this.loginSuccessAction,
             payload: {
                 account
             }
         };
     }
 
-    static loginSuccessHandler(state, {
-        payload: account
-    }) {
+    static loginSuccessHandler(state, { payload: account }) {
         return {
             account
         };
@@ -110,7 +100,7 @@ class LoginReducer {
 
     loginFailure() {
         return {
-            type: this.logoutSuccess
+            type: this.loginFailure
         };
     }
 
@@ -120,26 +110,26 @@ class LoginReducer {
 
     reducer(state = _.get(localStorage.getItem('pmgr'), this.LOCAL_STORAGE_PATH) || {}, action) {
         switch (action.type) {
-        case this.loginAction:
-            return LoginReducer.loginHandler(state, action);
+            case this.loginAction:
+                return LoginReducer.loginHandler(state, action);
 
-        case this.logoutAction:
-            return LoginReducer.logoutHandler(state, action);
+            case this.logoutAction:
+                return LoginReducer.logoutHandler(state, action);
 
-        case this.loginSuccessAction:
-            return LoginReducer.loginSuccessHandler(state, action);
+            case this.loginSuccessAction:
+                return LoginReducer.loginSuccessHandler(state, action);
 
-        case this.loginFailureAction:
-            return LoginReducer.loginFailureHandler(state, action);
+            case this.loginFailureAction:
+                return LoginReducer.loginFailureHandler(state, action);
 
-        default:
-            return state;
+            default:
+                return state;
         }
     }
 
     initializeReducer() {
         injectReducer(this.STATE_PATH, this.reducer.bind(this));
-        runSaga(this.loginSaga);
+        runSaga(this.loginSaga.bind(this));
     }
 }
 

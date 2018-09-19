@@ -1,5 +1,5 @@
 module.exports = {
-    extends: ['eslint:recommended', 'plugin:jest/recommended', 'prettier', 'airbnb-base', 'plugin:react/recommended'],
+    extends: ['eslint:recommended', 'plugin:jest/recommended', 'prettier', 'plugin:react/recommended'],
     plugins: ['babel', 'jest', 'react'],
     parser: 'babel-eslint',
     env: {
@@ -11,13 +11,14 @@ module.exports = {
     },
     rules: {
         'comma-dangle': ['error', 'never'],
-        indent: ['error', 4 ],
+        indent: ['error', 4, { SwitchCase: 1 }],
         'linebreak-style': ['error', 'unix'],
         'no-unused-vars': ['warn'],
         'no-console': 2,
         'no-redeclare': 'warn',
         quotes: ['error', 'single', { avoidEscape: true }],
-        semi: ['error', 'always']
+        semi: ['error', 'always'],
+        'generator-star-spacing': ['error', { before: true, after: false }]
     },
     parserOptions: {
         sourceType: 'module',
@@ -27,15 +28,15 @@ module.exports = {
     globals: { React: true },
     settings: {
         react: {
-            createClass: "createReactClass",
-            pragma: "React",
+            createClass: 'createReactClass',
+            pragma: 'React',
             version: 15.4,
-            flowVersion: "0.53" 
+            flowVersion: '0.53'
         },
-        propWrapperFunctions: [ "forbidExtraProps" ],
-        "import/resolver": {
-            "babel-module" : {
-                extensions: [ ".js", ".jsx" ]
+        propWrapperFunctions: ['forbidExtraProps'],
+        'import/resolver': {
+            'babel-module': {
+                extensions: ['.js', '.jsx']
             }
         }
     }
