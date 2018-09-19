@@ -4,10 +4,11 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import LoginPanel from './login-panel';
 import Reducers from '../reducers';
+import Pmgr from './pmgr';
 
 class MainContainer extends Component {
     render() {
-        return this.props.account ? <div>Logged in</div> : <LoginPanel />;
+        return this.props.account ? <Pmgr /> : <LoginPanel />;
     }
 }
 

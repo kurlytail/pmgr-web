@@ -164,9 +164,7 @@ Object {
             expect(newState).toMatchInlineSnapshot(`
 Object {
   "account": Object {
-    "account": Object {
-      "name": "test success",
-    },
+    "name": "test success",
   },
 }
 `);

@@ -92,9 +92,9 @@ class LoginReducer {
         };
     }
 
-    static loginSuccessHandler(state, { payload: account }) {
+    static loginSuccessHandler(state, { payload }) {
         return {
-            account
+            account: payload.account
         };
     }
 
