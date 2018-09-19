@@ -195,48 +195,16 @@ Object {
             expect(next.value).toMatchInlineSnapshot(`
 Object {
   "@@redux-saga/IO": true,
-  "TAKE": Object {
-    "pattern": Array [
-      "LOGIN-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
+  "SELECT": Object {
+    "args": Array [
+      "app.local.login.account",
     ],
+    "selector": [Function],
   },
 }
 `);
 
             next = saga.next(FIXTURES.account);
-            expect(next.value).toMatchInlineSnapshot(`
-Object {
-  "@@redux-saga/IO": true,
-  "CALL": Object {
-    "args": Array [
-      Object {
-        "name": "name",
-        "role": "role",
-      },
-    ],
-    "context": null,
-    "fn": [Function],
-  },
-}
-`);
-            next = saga.next('put response');
-            expect(next.value).toMatchInlineSnapshot(`
-Object {
-  "@@redux-saga/IO": true,
-  "PUT": Object {
-    "action": Object {
-      "payload": Object {
-        "account": "put response",
-      },
-      "type": [Function],
-    },
-    "channel": null,
-  },
-}
-`);
-
-            /* Logout here */
-            next = saga.next('logging out');
             expect(next.value).toMatchInlineSnapshot(`
 Object {
   "@@redux-saga/IO": true,
@@ -247,16 +215,41 @@ Object {
   },
 }
 `);
-            next = saga.next('logout rest response');
+            next = saga.next('put response');
             expect(next.value).toMatchInlineSnapshot(`
 Object {
   "@@redux-saga/IO": true,
   "CALL": Object {
     "args": Array [
-      "logout rest response",
+      "put response",
     ],
     "context": null,
     "fn": [Function],
+  },
+}
+`);
+
+            /* Logout here */
+            next = saga.next('logging out');
+            expect(next.value).toMatchInlineSnapshot(`
+Object {
+  "@@redux-saga/IO": true,
+  "SELECT": Object {
+    "args": Array [
+      "app.local.login.account",
+    ],
+    "selector": [Function],
+  },
+}
+`);
+            next = saga.next('logout rest response');
+            expect(next.value).toMatchInlineSnapshot(`
+Object {
+  "@@redux-saga/IO": true,
+  "TAKE": Object {
+    "pattern": Array [
+      "LOGOUT-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
+    ],
   },
 }
 `);
@@ -266,10 +259,12 @@ Object {
             expect(next.value).toMatchInlineSnapshot(`
 Object {
   "@@redux-saga/IO": true,
-  "TAKE": Object {
-    "pattern": Array [
-      "LOGIN-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
+  "CALL": Object {
+    "args": Array [
+      "logging in again",
     ],
+    "context": null,
+    "fn": [Function],
   },
 }
 `);
