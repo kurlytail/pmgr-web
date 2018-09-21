@@ -11,15 +11,6 @@ class Dashboard extends Component {
                 <div className="wrapper">
                     <div className="page">
                         <div className="page-inner">
-                            <header className="page-title-bar">
-                                <p className="lead">
-                                    <span className="font-weight-bold">Hi, Beni.</span>
-                                    <span className="d-block text-muted">
-                                        Here’s what’s happening with your business today.
-                                    </span>
-                                </p>
-                            </header>
-
                             <div className="page-section">
                                 <div className="section-block">
                                     <div className="metric-row">

@@ -16,6 +16,7 @@ class LoginReducer {
     }
 
     *loginSaga() {
+        // yield put(this.loginSuccess({ name: 'Ashwin Kamath' }));
         do {
             let account = yield select(_.get, `${this.STATE_PATH}.account`);
 
@@ -69,7 +70,8 @@ class LoginReducer {
     ) {
         return {
             email,
-            password
+            password,
+            pending: true
         };
     }
 

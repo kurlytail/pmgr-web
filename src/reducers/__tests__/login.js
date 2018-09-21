@@ -129,6 +129,7 @@ Object {
 Object {
   "email": "test@joe.com",
   "password": "password",
+  "pending": true,
 }
 `);
             expect(handlerSpy).toHaveBeenCalled();
