@@ -17,9 +17,7 @@ const showConfigOnly = '1' === process.env.SHOW_CONFIG_ONLY || 'true' === proces
 
 // Read dependencies key from package.json, and map out regex obj's
 //   for advanced filtering.
-let {
-    dependencies
-} = require('./package.json');
+let { dependencies } = require('./package.json');
 dependencies = Object.keys(dependencies).map(key => {
     return new RegExp(`^${key}.*`);
 });
@@ -47,7 +45,8 @@ const config = {
         new HtmlWebpackPlugin({
             title: 'Project Manager 1.0',
             filename: 'index.html',
-            template: './src/html.jst'
+            template: './src/html.jst',
+            hash: true
         }),
         new CircularDependencyPlugin({
             exclude: /node_modules/,
@@ -61,7 +60,8 @@ const config = {
     ],
 
     module: {
-        rules: [{
+        rules: [
+            {
                 test: /\.jsx?$/,
                 enforce: 'pre',
                 use: [
@@ -88,7 +88,7 @@ const config = {
                 loader: 'css-loader',
                 query: {
                     modules: true,
-                    localIdentName: '[name]__[local]___[hash:base64:5]'
+                    localIdentName: '[local]'
                 },
                 include: path.join(__dirname, 'src')
             },
@@ -99,7 +99,8 @@ const config = {
             },
             {
                 test: /\.less$/,
-                use: [{
+                use: [
+                    {
                         loader: 'style-loader'
                     },
                     {
@@ -117,6 +118,10 @@ const config = {
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
                 loader: ['file-loader']
+            },
+            {
+                test: require.resolve('stacked-menu'),
+                use: 'exports-loader?StackedMenu'
             }
         ]
     },
@@ -138,10 +143,12 @@ const config = {
 };
 
 if (isProd) {
-    config.plugins.push(new UglifyEsPlugin({
-        mangle: true,
-        compress: true
-    }));
+    config.plugins.push(
+        new UglifyEsPlugin({
+            mangle: true,
+            compress: true
+        })
+    );
 }
 
 // If ran with SHOW_CONFIG_ONLY=1|true, only show the config and exit cleanly

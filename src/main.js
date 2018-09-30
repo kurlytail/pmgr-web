@@ -5,6 +5,19 @@
  */
 
 import $ from 'jquery';
+import Popper from 'popper.js';
+import StackedMenu from 'stacked-menu';
+import PerfectScrollbar from 'perfect-scrollbar';
+import 'flatpickr';
+import 'easy-pie-chart';
+import 'chart.js';
+
+import 'bootstrap';
+import './styles/main.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'flatpickr/dist/flatpickr.css';
+import 'font-awesome/css/font-awesome.css';
+import 'open-iconic/font/css/open-iconic-bootstrap.css';
 
 var App = {
     init: function init() {
@@ -18,7 +31,7 @@ var App = {
         // settings
         // =============================================================
         // Turn off the transform placement on Popper
-        window.Popper.Defaults.modifiers.computeStyle.gpuAcceleration = false;
+        Popper.Defaults.modifiers.computeStyle.gpuAcceleration = false;
 
         // event handlers
         // =============================================================
@@ -321,17 +334,17 @@ var App = {
         });
     },
     handleScrollable: function handleScrollable() {
-        if (window.PerfectScrollbar && $('.has-scrollable').length) {
+        if ($('.has-scrollable').length) {
             $('.has-scrollable').each(function() {
-                return new window.PerfectScrollbar(this, {
+                return new PerfectScrollbar(this, {
                     suppressScrollX: true
                 });
             });
         }
     },
     handleStackedMenu: function handleStackedMenu() {
-        if (window.StackedMenu && $('#stacked-menu').length) {
-            return new window.StackedMenu();
+        if ($('#stacked-menu').length) {
+            return new StackedMenu();
         }
     },
     toggleSidebar: function toggleSidebar() {
