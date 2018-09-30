@@ -5,6 +5,7 @@
     "main": "main.js",
     "dependencies": {
         "axios": "^0.18.0",
+        "bootstrap": "^4.1.1",
         "debug": "^3.1.0",
         "devtron": "^1.4.0",
         "electron": "^2.0.2",
@@ -12,8 +13,10 @@
         "electron-reload": "^1.2.2",
         "history": "^4.7.2",
         "jest": "^23.6.0",
+        "jquery": "^3.3.1",
         "lodash": "^4.17.4",
         "markdown-to-jsx": "^6.3.1",
+        "popper.js": "^1.14.4",
         "project-name-generator": "^2.1.5",
         "prop-types": "^15.6.2",
         "rc-slider": "^8.6.1",
