@@ -15,13 +15,6 @@ const isDist = isDebug || isProd ? '.min' : '';
 const distPath = path.join(__dirname, 'dist');
 const showConfigOnly = '1' === process.env.SHOW_CONFIG_ONLY || 'true' === process.env.SHOW_CONFIG_ONLY;
 
-// Read dependencies key from package.json, and map out regex obj's
-//   for advanced filtering.
-let { dependencies } = require('./package.json');
-dependencies = Object.keys(dependencies).map(key => {
-    return new RegExp(`^${key}.*`);
-});
-
 const config = {
     entry: {
         app: './src/app.jsx'

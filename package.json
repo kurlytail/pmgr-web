@@ -1,7 +1,7 @@
 {
     "name": "@kurlytail/pmgr-web",
     "description": "PMGR web interface",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "main": "dist/app.min.js",
     "devDependencies": {
         "axios": "^0.18.0",
@@ -98,7 +98,6 @@
     },
     "scripts": {
         "docs": "jsdoc -c jsdoc.json && npx opn-cli ./docs/index.html",
-        "build:dll": "npm run build -- --config ./webpack_dll.config.js",
         "build": "NODE_ENV=\"debug\" webpack --display-modules --display-reasons",
         "start": "webpack-dev-server --hot --inline",
         "start-local": "electron main.js --debug",
