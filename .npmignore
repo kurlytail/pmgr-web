@@ -1,4 +1,2 @@
-*tgz
-node_modules/
-test-report.xml
-coverage/
+*
+!dist/*
