@@ -1,7 +1,7 @@
 {
     "name": "@kurlytail/pmgr-web",
     "description": "PMGR web interface",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "main": "dist/app.min.js",
     "devDependencies": {
         "axios": "^0.18.0",
