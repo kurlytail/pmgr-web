@@ -26,12 +26,7 @@ class LoginPanel extends Component {
                         <a href="auth-signup.html">Create One</a>
                     </p>
                 </header>
-                <form
-                    className="auth-form"
-                    id="auth-signin-form"
-                    encType="utf8"
-                    onSubmit={() => this.props.login(this.state.email, this.state.password)}
-                >
+                <form className="auth-form" id="auth-signin-form" encType="utf8">
                     <div className="form-group">
                         <div className="form-label-group">
                             <input
@@ -62,7 +57,14 @@ class LoginPanel extends Component {
                     </div>
 
                     <div className="form-group">
-                        <button className="btn btn-lg btn-primary btn-block" type="submit" id="auth-signin-button">
+                        <button
+                            className="btn btn-lg btn-primary btn-block"
+                            id="auth-signin-button"
+                            onClick={e => {
+                                this.props.login(this.state.email, this.state.password);
+                                e.preventDefault();
+                            }}
+                        >
                             Sign In
                         </button>
                     </div>
@@ -106,6 +108,7 @@ const mapProps = state => ({
 const mapDispatch = dispatch => ({
     login: (...params) => {
         dispatch(Reducers.login.login(...params));
+        return false;
     }
 });
 
