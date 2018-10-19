@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Reducers from '../reducers';
 import _ from 'lodash';
 import ToplevelFooter from '../components/toplevel-footer';
-import AuthHeader from '../components/auth-header';
-import AuthForm from '../components/auth-form';
+import RegistrationHeader from '../components/registration-header';
+import RegistrationForm from '../components/registration-form';
 import { Redirect } from 'react-router';
 import Spinner from '../components/spinner';
 
-class LoginPanel extends Component {
+class RegistrationPanel extends Component {
+    componentDidMount() {
+        const { actions } = this.props;
+        actions.getRegister();
+    }
+
     render() {
         if (this.props.account) {
             return <Redirect to="/" />;
@@ -17,9 +23,9 @@ class LoginPanel extends Component {
 
         return (
             <main className="auth">
-                <AuthHeader />
-                <Spinner loading={_.get(this.props, 'account.pending')}>
-                    <AuthForm login={this.props.login} pending={_.get(this.props, 'account.pending')} />
+                <RegistrationHeader />
+                <Spinner loading={this.props.state.isFetchingItem}>
+                    <RegistrationForm state={this.props.state} actions={this.props.actions} />
                 </Spinner>
                 <ToplevelFooter />
             </main>
@@ -27,23 +33,22 @@ class LoginPanel extends Component {
     }
 }
 
-LoginPanel.propTypes = {
-    login: PropTypes.func,
+RegistrationPanel.propTypes = {
+    state: PropTypes.any,
+    actions: PropTypes.any,
     account: PropTypes.any
 };
 
 const mapProps = state => ({
+    state: _.get(state, Reducers.register.STATE_PATH),
     account: _.get(state, `${Reducers.login.STATE_PATH}.account`)
 });
 
 const mapDispatch = dispatch => ({
-    login: (...params) => {
-        dispatch(Reducers.login.login(...params));
-        return false;
-    }
+    actions: bindActionCreators({ ...Reducers.register }, dispatch)
 });
 
 export default connect(
     mapProps,
     mapDispatch
-)(LoginPanel);
+)(RegistrationPanel);

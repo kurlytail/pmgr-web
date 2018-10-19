@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-let authHeader = () => (
+let registrationHeader = () => (
     <header
         id="auth-header"
         className="auth-header"
@@ -18,4 +18,4 @@ let authHeader = () => (
     </header>
 );
 
-export default authHeader;
+export default registrationHeader;

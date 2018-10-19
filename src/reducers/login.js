@@ -82,7 +82,7 @@ class LoginReducer {
     }
 
     static logoutHandler() {
-        return {};
+        return null;
     }
 
     loginSuccess(account) {

@@ -48,17 +48,7 @@ describe('# LoginReducer', () => {
 
     describe('## constructor', () => {
         it('### should create default object', () => {
-            expect(reducer).toMatchInlineSnapshot(`
-LoginReducer {
-  "ACTION_ID": "909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-  "LOCAL_STORAGE_PATH": "login",
-  "STATE_PATH": "app.local.login",
-  "loginAction": "LOGIN-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-  "loginFailureAction": "LOGIN-FAILURE-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-  "loginSuccessAction": "LOGIN-SUCCESS-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-  "logoutAction": "LOGOUT-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-}
-`);
+            expect(reducer).toMatchSnapshot();
         });
     });
 
@@ -66,17 +56,7 @@ LoginReducer {
         it('## should create a login reducer', () => {
             reducer.initializeReducer();
 
-            expect(reducer).toMatchInlineSnapshot(`
-LoginReducer {
-  "ACTION_ID": "909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-  "LOCAL_STORAGE_PATH": "login",
-  "STATE_PATH": "app.local.login",
-  "loginAction": "LOGIN-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-  "loginFailureAction": "LOGIN-FAILURE-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-  "loginSuccessAction": "LOGIN-SUCCESS-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-  "logoutAction": "LOGOUT-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-}
-`);
+            expect(reducer).toMatchSnapshot();
 
             expect(Store.injectReducer).toHaveBeenCalled();
             expect(Store.runSaga).toHaveBeenCalled();
@@ -86,26 +66,14 @@ LoginReducer {
     describe('## login', () => {
         it('### should return login action arguments as an object', () => {
             const loginActionArgs = reducer.login('test@joe.com', 'password');
-            expect(loginActionArgs).toMatchInlineSnapshot(`
-Object {
-  "payload": Object {
-    "email": "test@joe.com",
-    "password": "password",
-  },
-  "type": "LOGIN-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-}
-`);
+            expect(loginActionArgs).toMatchSnapshot();
         });
     });
 
     describe('## logout', () => {
         it('### should return logout action arguments as an object', () => {
             const logoutActionArgs = reducer.logout();
-            expect(logoutActionArgs).toMatchInlineSnapshot(`
-Object {
-  "type": "LOGOUT-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-}
-`);
+            expect(logoutActionArgs).toMatchSnapshot();
         });
     });
 
@@ -115,7 +83,7 @@ Object {
                 action: '@@INIT'
             });
 
-            expect(newState).toMatchInlineSnapshot('Object {}');
+            expect(newState).toMatchSnapshot();
         });
 
         it('### should call loginHandler for loginAction', () => {
@@ -125,13 +93,7 @@ Object {
                 payload: FIXTURES.loginPayload
             });
 
-            expect(newState).toMatchInlineSnapshot(`
-Object {
-  "email": "test@joe.com",
-  "password": "password",
-  "pending": true,
-}
-`);
+            expect(newState).toMatchSnapshot();
             expect(handlerSpy).toHaveBeenCalled();
         });
 
@@ -141,8 +103,8 @@ Object {
                 type: reducer.logoutAction
             });
 
-            expect(newState).toMatchInlineSnapshot('Object {}');
-            expect(handlerSpy).toHaveBeenCalled();
+            expect(newState).toMatchSnapshot();
+            expect(handlerSpy).toMatchSnapshot();
         });
 
         it('### should call logoutHandler for logoutAction on pending logins', () => {
@@ -151,7 +113,7 @@ Object {
                 type: reducer.logoutAction
             });
 
-            expect(newState).toMatchInlineSnapshot('Object {}');
+            expect(newState).toMatchSnapshot();
             expect(handlerSpy).toHaveBeenCalled();
         });
 
@@ -162,13 +124,7 @@ Object {
                 payload: FIXTURES.loginSuccessPayload
             });
 
-            expect(newState).toMatchInlineSnapshot(`
-Object {
-  "account": Object {
-    "name": "test success",
-  },
-}
-`);
+            expect(newState).toMatchSnapshot();
             expect(handlerSpy).toHaveBeenCalled();
         });
 
@@ -178,7 +134,7 @@ Object {
                 type: reducer.loginFailureAction
             });
 
-            expect(newState).toMatchInlineSnapshot('Object {}');
+            expect(newState).toMatchSnapshot();
             expect(handlerSpy).toHaveBeenCalled();
         });
     });
@@ -186,87 +142,27 @@ Object {
     describe('## loginSaga', () => {
         it('### should traverse login/logout machine', () => {
             const saga = reducer.loginSaga();
-            expect(saga).toMatchInlineSnapshot('Object {}');
+            expect(saga).toMatchSnapshot();
 
             let next = saga.next({
                 payload: FIXTURES.loginPayload
             });
-            expect(next.value).toMatchInlineSnapshot(`
-Object {
-  "@@redux-saga/IO": true,
-  "SELECT": Object {
-    "args": Array [
-      "app.local.login.account",
-    ],
-    "selector": [Function],
-  },
-}
-`);
+            expect(next.value).toMatchSnapshot();
 
             next = saga.next(FIXTURES.account);
-            expect(next.value).toMatchInlineSnapshot(`
-Object {
-  "@@redux-saga/IO": true,
-  "TAKE": Object {
-    "pattern": Array [
-      "LOGOUT-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-    ],
-  },
-}
-`);
+            expect(next.value).toMatchSnapshot();
             next = saga.next('put response');
-            expect(next.value).toMatchInlineSnapshot(`
-Object {
-  "@@redux-saga/IO": true,
-  "CALL": Object {
-    "args": Array [
-      "put response",
-    ],
-    "context": null,
-    "fn": [Function],
-  },
-}
-`);
+            expect(next.value).toMatchSnapshot();
 
             /* Logout here */
             next = saga.next('logging out');
-            expect(next.value).toMatchInlineSnapshot(`
-Object {
-  "@@redux-saga/IO": true,
-  "SELECT": Object {
-    "args": Array [
-      "app.local.login.account",
-    ],
-    "selector": [Function],
-  },
-}
-`);
+            expect(next.value).toMatchSnapshot();
             next = saga.next('logout rest response');
-            expect(next.value).toMatchInlineSnapshot(`
-Object {
-  "@@redux-saga/IO": true,
-  "TAKE": Object {
-    "pattern": Array [
-      "LOGOUT-909EA664-44C5-4F7F-BF9E-BA5FF5F3AC48",
-    ],
-  },
-}
-`);
+            expect(next.value).toMatchSnapshot();
 
             /* Back to login */
             next = saga.next('logging in again');
-            expect(next.value).toMatchInlineSnapshot(`
-Object {
-  "@@redux-saga/IO": true,
-  "CALL": Object {
-    "args": Array [
-      "logging in again",
-    ],
-    "context": null,
-    "fn": [Function],
-  },
-}
-`);
+            expect(next.value).toMatchSnapshot();
         });
     });
 });

@@ -1,4 +1,6 @@
-let authFooter = () => (
+import React from 'react';
+
+let footer = () => (
     <footer className="auth-footer">
         © 2018 All Rights Reserved.
         <a href="#">Privacy</a>
@@ -7,4 +9,4 @@ let authFooter = () => (
     </footer>
 );
 
-export default authFooter;
+export default footer;

@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import LoginPanel from './login-panel';
 import Reducers from '../reducers';
 import Pmgr from './pmgr';
+import { Redirect } from 'react-router';
 
 class MainContainer extends Component {
     render() {
-        return this.props.account ? <Pmgr /> : <LoginPanel />;
+        if (!this.props.account) {
+            return <Redirect to="/login" />;
+        }
+        return <Pmgr />;
     }
 }
 
