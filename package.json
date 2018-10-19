@@ -126,5 +126,8 @@
         "setupFiles": [
             "jest-localstorage-mock"
         ]
+    },
+    "dependencies": {
+        "redux-axios-middleware": "^4.0.0"
     }
 }
