@@ -12,8 +12,8 @@ let registrationHeader = () => (
             <span className="sr-only">Sign In</span>
         </h1>
         <p>
-            {"Don't have a account?"}
-            <Link to="/register">Create One</Link>
+            {'Already registered?'}
+            <Link to="/login">Sign In</Link>
         </p>
     </header>
 );

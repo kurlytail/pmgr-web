@@ -85,7 +85,7 @@
         "less": "^2.7.3",
         "less-loader": "^4.0.5",
         "opn-cli": "^3.1.0",
-        "prettier": "^1.7.4",
+        "prettier": "^1.10.2",
         "react-edit-inline": "^1.0.8",
         "rimraf": "^2.6.2",
         "source-map-loader": "^0.2.3",
@@ -128,12 +128,14 @@
         ]
     },
     "dependencies": {
+        "@kurlytail/user-registration": "^0.0.33",
         "enzyme": "^3.7.0",
         "react-google-recaptcha": "^1.0.4",
         "react-loading-overlay": "^0.3.0",
         "react-spinners": "^0.4.7",
         "react-test-renderer": "^16.5.2",
         "redux-axios-middleware": "^4.0.0",
-        "redux-rest-resource": "^0.19.2"
+        "redux-rest-resource": "^0.19.2",
+        "stringifier": "^1.4.0"
     }
 }

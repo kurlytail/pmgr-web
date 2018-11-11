@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 class AccountPanel extends Component {
     render() {
@@ -17,7 +18,7 @@ class AccountPanel extends Component {
                         <img src="/assets/images/avatars/profile.jpg" alt="" />
                     </span>{' '}
                     <span className="account-summary pr-lg-4 d-none d-lg-block">
-                        <span className="account-name">{this.props.account.name}</span>{' '}
+                        <span className="account-name">{_.get(this.props.account, 'name')}</span>{' '}
                         <span className="account-description">Marketing Manager</span>
                     </span>
                 </button>

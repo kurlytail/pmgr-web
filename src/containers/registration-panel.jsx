@@ -6,27 +6,36 @@ import Reducers from '../reducers';
 import _ from 'lodash';
 import ToplevelFooter from '../components/toplevel-footer';
 import RegistrationHeader from '../components/registration-header';
-import RegistrationForm from '../components/registration-form';
+import { RegistrationForm } from '@kurlytail/user-registration';
 import { Redirect } from 'react-router';
 import Spinner from '../components/spinner';
+import ErrorCard from '../components/error-card';
+import InfoCard from '../components/info-card';
 
 class RegistrationPanel extends Component {
     componentDidMount() {
         const { actions } = this.props;
-        actions.getRegister();
+        actions.getRegistration().catch(() => {});
     }
 
     render() {
         if (this.props.account) {
             return <Redirect to="/" />;
         }
-
         return (
             <main className="auth">
                 <RegistrationHeader />
-                <Spinner loading={this.props.state.isFetchingItem}>
-                    <RegistrationForm state={this.props.state} actions={this.props.actions} />
-                </Spinner>
+                {this.props.state.error ? (
+                    <ErrorCard topic="Server error" error={this.props.state.error} />
+                ) : (
+                    <Spinner loading={this.props.state.isFetchingItem}>
+                        {this.props.state.items.length === 0 ? (
+                            <RegistrationForm state={this.props.state} actions={this.props.actions} />
+                        ) : (
+                            <InfoCard topic="You registered successfully" info="Please check your email" />
+                        )}
+                    </Spinner>
+                )}
                 <ToplevelFooter />
             </main>
         );

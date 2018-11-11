@@ -1,19 +1,11 @@
-import {
-    createStore,
-    combineReducers,
-    applyMiddleware
-} from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import _ from 'lodash';
-import {
-    composeWithDevTools
-} from 'redux-devtools-extension';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import TH from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import {
-    routerReducer,
-    routerMiddleware
-} from 'react-router-redux';
+import { routerReducer, routerMiddleware } from 'react-router-redux';
 import createHistory from 'history/createHashHistory';
+import { defaultReducers } from 'redux-rest-resource/lib/reducers';
 
 const StoreInfo = {
     asyncReducers: {},
@@ -22,9 +14,24 @@ const StoreInfo = {
 };
 
 const sagaMiddleware = createSagaMiddleware();
-const enhancer = composeWithDevTools(applyMiddleware(TH, sagaMiddleware,
-    routerMiddleware(StoreInfo.history)));
+const enhancer = composeWithDevTools(applyMiddleware(TH, sagaMiddleware, routerMiddleware(StoreInfo.history)));
 const globalAsyncReducers = {};
+
+Object.entries(defaultReducers).forEach(([key, action]) => {
+    defaultReducers[key] = (state, a) => {
+        state = action(state, a);
+        if (a.status === 'rejected') {
+            if (typeof a.body === 'string') {
+                state.error = a.body;
+            } else {
+                state.error = { ...a.body };
+            }
+        } else {
+            delete state.error;
+        }
+        return state;
+    };
+});
 
 function createReducer(asyncReducers, pathPrefix) {
     const constructedReducers = {};
@@ -72,7 +79,7 @@ function runSaga(saga) {
 }
 
 function finalizeStore() {
-    const loadStorage = (storage) => {
+    const loadStorage = storage => {
         try {
             const serializedState = storage.getItem('pmgr');
             if (serializedState === null) {
@@ -93,7 +100,8 @@ function finalizeStore() {
     const localState = loadStorage(localStorage);
 
     StoreInfo.store = createStore(
-        createReducer(StoreInfo.asyncReducers, ''), {
+        createReducer(StoreInfo.asyncReducers, ''),
+        {
             app: {
                 local: localState
             }
@@ -108,13 +116,6 @@ function finalizeStore() {
 
 injectReducer('routing', routerReducer);
 
-export {
-    StoreInfo,
-    checkReducer,
-    injectReducer,
-    checkReducers,
-    runSaga,
-    finalizeStore
-};
+export { StoreInfo, checkReducer, injectReducer, checkReducers, runSaga, finalizeStore };
 
 /* End */
