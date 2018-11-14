@@ -8,15 +8,21 @@ import { Redirect } from 'react-router';
 
 class MainContainer extends Component {
     render() {
-        if (!this.props.account) {
-            return <Redirect to="/login" />;
+        if (this.props.account) {
+            return <Pmgr />;
         }
-        return <Pmgr />;
+
+        if (this.props.location.pathname && this.props.location.pathname.startsWith('/auth')) {
+            return <div />;
+        }
+
+        return <Redirect to="/auth/login" />;
     }
 }
 
 MainContainer.propTypes = {
-    account: PropTypes.any
+    account: PropTypes.any,
+    location: PropTypes.any
 };
 
 const mapProps = state => ({

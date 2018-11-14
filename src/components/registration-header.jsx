@@ -13,7 +13,7 @@ let registrationHeader = () => (
         </h1>
         <p>
             {'Already registered?'}
-            <Link to="/login">Sign In</Link>
+            <Link to="/auth/login">Sign In</Link>
         </p>
     </header>
 );

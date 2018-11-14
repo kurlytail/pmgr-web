@@ -13,7 +13,7 @@ let authHeader = () => (
         </h1>
         <p>
             {"Don't have a account?"}
-            <Link to="/register">Create One</Link>
+            <Link to="/auth/register">Create One</Link>
         </p>
     </header>
 );

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { stringify } from 'stringifier';
 
 class ErrorCard extends Component {
     render() {
@@ -10,7 +9,9 @@ class ErrorCard extends Component {
                     <h2>{this.props.topic}</h2>
                 </header>
                 <div className="card-body">
-                    <p className="lead">{stringify(this.props.error)}</p>
+                    <p className="lead">
+                        {typeof this.props.error === 'object' ? this.props.error.error : this.props.error}
+                    </p>
                 </div>
             </section>
         );

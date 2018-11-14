@@ -9,6 +9,7 @@ import './styles/style.css';
 import MainContainer from './containers/main';
 import LoginPanel from './containers/login-panel';
 import RegistrationPanel from './containers/registration-panel';
+import ConfirmationPanel from './containers/signup-confirm-panel';
 
 import App from './main';
 
@@ -19,8 +20,9 @@ render(
         <ConnectedRouter history={StoreInfo.history}>
             <div>
                 <Route path="/" component={MainContainer} />
-                <Route path="/login" component={LoginPanel} />
-                <Route path="/register" component={RegistrationPanel} />
+                <Route path="/auth/login" component={LoginPanel} />
+                <Route path="/auth/register" component={RegistrationPanel} />
+                <Route path="/auth/signup-continue" component={ConfirmationPanel} />
             </div>
         </ConnectedRouter>
     </Provider>,

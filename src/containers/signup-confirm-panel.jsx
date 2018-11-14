@@ -5,20 +5,16 @@ import PropTypes from 'prop-types';
 import Reducers from '../reducers';
 import _ from 'lodash';
 import ToplevelFooter from '../components/toplevel-footer';
-import RegistrationHeader from '../components/registration-header';
-import { RegistrationForm } from '@kurlytail/user-registration';
+import { ConfirmationForm } from '@kurlytail/user-registration';
 import { Redirect } from 'react-router';
-import Spinner from '../components/spinner';
 import ErrorCard from '../components/error-card';
-import InfoCard from '../components/info-card';
+import QueryString from 'query-string';
+import RegistrationHeader from '../components/registration-header';
+import Spinner from '../components/spinner';
 
-class RegistrationPanel extends Component {
-    componentDidMount() {
-        const { actions } = this.props;
-        actions.getRegistration().catch(() => {});
-    }
-
+class ConfirmationPanel extends Component {
     render() {
+        const { email, hash } = QueryString.parse(this.props.location.search);
         if (this.props.account) {
             return <Redirect to="/" />;
         }
@@ -28,12 +24,13 @@ class RegistrationPanel extends Component {
                 {this.props.state.error ? (
                     <ErrorCard topic="Server error" error={this.props.state.error} />
                 ) : (
-                    <Spinner loading={this.props.state.isFetchingItem || this.props.state.isCreating}>
-                        {this.props.state.items.length === 0 ? (
-                            <RegistrationForm state={this.props.state} actions={this.props.actions} />
-                        ) : (
-                            <InfoCard topic="You registered successfully" info="Please check your email" />
-                        )}
+                    <Spinner loading={this.props.state.isDeleting}>
+                        <ConfirmationForm
+                            state={this.props.state}
+                            actions={this.props.actions}
+                            email={email}
+                            hash={hash}
+                        />
                     </Spinner>
                 )}
                 <ToplevelFooter />
@@ -42,10 +39,11 @@ class RegistrationPanel extends Component {
     }
 }
 
-RegistrationPanel.propTypes = {
+ConfirmationPanel.propTypes = {
     state: PropTypes.any,
     actions: PropTypes.any,
-    account: PropTypes.any
+    account: PropTypes.any,
+    location: PropTypes.object
 };
 
 const mapProps = state => ({
@@ -60,4 +58,4 @@ const mapDispatch = dispatch => ({
 export default connect(
     mapProps,
     mapDispatch
-)(RegistrationPanel);
+)(ConfirmationPanel);

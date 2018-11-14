@@ -128,7 +128,7 @@
         ]
     },
     "dependencies": {
-        "@kurlytail/user-registration": "^0.0.33",
+        "@kurlytail/user-registration": "^0.0.42",
         "enzyme": "^3.7.0",
         "react-google-recaptcha": "^1.0.4",
         "react-loading-overlay": "^0.3.0",
