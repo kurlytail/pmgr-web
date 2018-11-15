@@ -48,6 +48,8 @@ pipeline {
                     sh 'npm run build'
                     sh 'npm publish'
                 }
+
+                build job: 'kurlytail/pmgr-app/master', wait: false
             }
         }
     }
