@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     loadLibrary()
-                    env['NPM_VERSION_NUMBER'] = getNpmVersion 'kurlytail/pmgr-app/master', params.BUILD_VERSION_PREFIX, params.BUILDS_OFFSET
+                    env['NPM_VERSION_NUMBER'] = getNpmVersion 'kurlytail/pmgr-web/master', params.BUILD_VERSION_PREFIX, params.BUILDS_OFFSET
                     currentBuild.displayName = env['NPM_VERSION_NUMBER']
                 }
             }
